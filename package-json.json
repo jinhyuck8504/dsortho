@@ -1,0 +1,51 @@
+{
+  "name": "daechisamsungortho-website",
+  "version": "1.0.0",
+  "description": "대치삼성정형외과 공식 웹사이트",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=3000 --open=index.html",
+    "build": "npm run optimize",
+    "optimize": "npm run minify-css && npm run minify-js && npm run optimize-images",
+    "minify-css": "cleancss -o dist/styles.min.css assets/css/styles.css",
+    "minify-js": "uglifyjs assets/js/main.js -o dist/main.min.js",
+    "optimize-images": "imagemin assets/images/*.{jpg,png,svg} --out-dir=dist/images",
+    "test": "echo \"테스트 실행 중...\" && exit 0",
+    "deploy": "netlify deploy --prod --dir=.",
+    "sitemap": "node scripts/generate-sitemap.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/USERNAME/daechisamsungortho.git"
+  },
+  "keywords": [
+    "정형외과",
+    "대치동",
+    "석회성건염",
+    "오십견",
+    "허리디스크",
+    "비수술치료",
+    "체외충격파",
+    "양형섭"
+  ],
+  "author": "대치삼성정형외과",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "clean-css-cli": "^5.6.2",
+    "uglify-js": "^3.17.4",
+    "imagemin": "^8.0.1",
+    "imagemin-pngquant": "^9.0.2",
+    "imagemin-mozjpeg": "^10.0.0",
+    "netlify-cli": "^15.11.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.4"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}
