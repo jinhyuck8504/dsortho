@@ -1105,34 +1105,35 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
         // 비밀번호 재설정
         async function handleResetPassword() {
             const email = document.getElementById('authEmail')?.value;
-
             if (!email) {
                 showMessage('이메일을 입력해주세요.', 'error');
                 return;
             }
-
             if (!supabase) {
                 showMessage('Supabase가 초기화되지 않았습니다.', 'error');
                 return;
             }
-
             try {
                 const { error } = await supabase.auth.resetPasswordForEmail(email);
-
                 if (error) throw error;
-
                 showMessage('비밀번호 재설정 이메일이 전송되었습니다.', 'success');
-
             } catch (error) {
                 console.error('비밀번호 재설정 실패:', error);
                 showMessage(getErrorMessage(error), 'error');
             }
         }
 
+        // 이메일로 시작하기
+        async function handleEmailStart() {
+            const loginResult = await handleSignIn();
+            if (!loginResult) {
+                await handleSignUp();
+            }
+        }
+
         // 로그아웃
         async function handleSignOut() {
             if (!supabase) return;
-
             try {
                 await supabase.auth.signOut();
                 showMessage('로그아웃되었습니다.', 'success');
