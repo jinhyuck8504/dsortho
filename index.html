@@ -1514,8 +1514,50 @@ async loadTreatmentCases() {
         })
 
         console.log('💡 콘솔에서 testAuth()를 실행하여 상태를 확인할 수 있습니다')
-
        
+        // ===========================================
+        // 원장님 프로필 로드 함수 추가
+        // ===========================================
+        async function loadDirectorProfile() {
+            if (!supabase) return
+            
+            try {
+                const { data, error } = await supabase
+                    .from('director_profile')
+                    .select('*')
+                    .limit(1)
+                
+                if (error) throw error
+                
+                if (data && data.length > 0) {
+                    const profile = data[0]
+                    
+                    const nameElement = document.querySelector('.director-name')
+                    if (nameElement && profile.name) {
+                        nameElement.textContent = profile.name
+                    }
+                    
+                    const titleElement = document.querySelector('.director-title')
+                    if (titleElement && profile.title) {
+                        titleElement.textContent = profile.title
+                    }
+                    
+                    const messageContainer = document.querySelector('.director-message')
+                    if (messageContainer && profile.message) {
+                        const singleParagraph = profile.message.replace(/\n+/g, ' ').trim()
+                        messageContainer.innerHTML = `<p style="font-size: 1.2rem; color: #1a237e; font-weight: 600; line-height: 1.8; margin-bottom: 15px;">${singleParagraph}</p>`
+                    }
+                    
+                    const photoElement = document.querySelector('.director-photo')
+                    if (photoElement && profile.photo) {
+                        photoElement.innerHTML = `<img src="${profile.photo}" alt="원장님 사진" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+                    }
+                }
+            } catch (error) {
+                console.error('❌ 프로필 로드 실패:', error)
+            }
+        }
+
     </script>
 </body>
 </html>
