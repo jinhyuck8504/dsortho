@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>대치삼성정형외과 관리자 패널</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>관리자 - 치료 사례 업로드</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         * {
             margin: 0;
@@ -13,204 +14,184 @@
         }
         
         body {
-            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Noto Sans KR', sans-serif;
             background: #f5f5f5;
-            color: #333;
-        }
-        
-        .admin-header {
-            background: #1a237e;
-            color: white;
             padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
-        .admin-container {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        
-        .admin-card {
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
             background: white;
-            padding: 30px;
             border-radius: 15px;
+            padding: 30px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
         }
         
-        .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #1a237e;
-            border-bottom: 2px solid #1a237e;
-            padding-bottom: 10px;
-        }
-        
-        .upload-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .upload-area {
-            border: 2px dashed #ccc;
-            border-radius: 10px;
-            padding: 40px;
+        .header {
             text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f9f9f9;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #1a237e;
         }
         
-        .upload-area:hover {
-            border-color: #1a237e;
-            background: #f0f0f0;
+        .header h1 {
+            color: #1a237e;
+            margin-bottom: 10px;
         }
         
-        .preview-image {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            margin-top: 10px;
+        .upload-form {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
         }
         
         .form-group {
             margin-bottom: 20px;
         }
         
-        .form-label {
+        .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #1a237e;
+            color: #333;
         }
         
-        .form-input, .form-textarea {
+        .form-group input,
+        .form-group textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
         }
         
-        .form-input:focus, .form-textarea:focus {
+        .form-group input:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: #1a237e;
         }
         
-        .form-textarea {
-            min-height: 100px;
-            resize: vertical;
+        .image-upload {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .upload-box {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .upload-box:hover {
+            border-color: #1a237e;
+            background: rgba(26, 35, 126, 0.05);
+        }
+        
+        .upload-box.has-image {
+            border-color: #28a745;
+            background: rgba(40, 167, 69, 0.05);
+        }
+        
+        .upload-box input[type="file"] {
+            display: none;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
         
         .btn {
-            padding: 12px 24px;
+            background: #1a237e;
+            color: white;
+            padding: 12px 30px;
             border: none;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
         }
         
-        .btn-primary {
-            background: #1a237e;
-            color: white;
-        }
-        
-        .btn-primary:hover {
+        .btn:hover {
             background: #0d47a1;
             transform: translateY(-2px);
         }
         
-        .btn-success {
-            background: #28a745;
-            color: white;
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
         }
         
-        .btn-success:hover {
-            background: #218838;
+        .cases-list {
+            margin-top: 40px;
         }
         
-        .btn-danger {
+        .case-item {
+            display: grid;
+            grid-template-columns: 100px 100px 1fr auto;
+            gap: 15px;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .case-thumbnail {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .delete-btn {
             background: #dc3545;
             color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
         }
         
-        .btn-danger:hover {
-            background: #c82333;
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
         }
         
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1a237e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
         }
         
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-        
-        .cases-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .case-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border: 1px solid #eee;
-        }
-        
-        .case-images {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-        }
-        
-        .case-image {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-        
-        .case-content {
-            padding: 15px;
-        }
-        
-        .case-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1a237e;
-        }
-        
-        .case-description {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-        
-        .case-actions {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .login-form {
-            max-width: 400px;
-            margin: 100px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .message {
@@ -231,338 +212,187 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        
-        .message.info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
-            background: linear-gradient(135deg, #1a237e, #3f51b5);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        @media (max-width: 768px) {
-            .upload-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .admin-container {
-                padding: 0 15px;
-            }
-            
-            .admin-card {
-                padding: 20px;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- 로그인 폼 -->
-    <div id="loginForm" class="login-form">
-        <h2 style="text-align: center; margin-bottom: 30px; color: #1a237e;">🔐 관리자 로그인</h2>
-        <div id="loginMessage" class="message"></div>
-        
-        <div class="form-group">
-            <label class="form-label">이메일</label>
-            <input type="email" id="adminEmail" class="form-input" placeholder="관리자 이메일을 입력하세요">
+    <div class="container">
+        <div class="header">
+            <h1>🏥 치료 사례 업로드</h1>
+            <p>대치삼성정형외과 관리자 페이지</p>
         </div>
         
-        <div class="form-group">
-            <label class="form-label">비밀번호</label>
-            <input type="password" id="adminPassword" class="form-input" placeholder="비밀번호를 입력하세요">
-        </div>
+        <div id="message" class="message"></div>
         
-        <button onclick="handleAdminLogin()" class="btn btn-primary" style="width: 100%;">로그인</button>
-        
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="index.html" style="color: #666; text-decoration: none;">← 메인 사이트로 돌아가기</a>
-        </div>
-    </div>
-
-    <!-- 관리자 패널 -->
-    <div id="adminPanel" style="display: none;">
-        <div class="admin-header">
-            <h1>🏥 대치삼성정형외과 관리자 패널</h1>
-            <p>환영합니다! <span id="adminEmailDisplay"></span>님</p>
-            <div style="margin-top: 15px;">
-                <a href="index.html" class="btn btn-secondary" style="margin-right: 10px;">🏠 메인 사이트</a>
-                <button onclick="handleLogout()" class="btn btn-danger">🚪 로그아웃</button>
+        <form id="uploadForm" class="upload-form">
+            <div class="form-group">
+                <label for="caseTitle">치료 사례 제목</label>
+                <input type="text" id="caseTitle" placeholder="예: 석회성건염 체외충격파 치료" required>
             </div>
-        </div>
-
-        <div class="admin-container">
-            <!-- 대시보드 통계 -->
-            <div class="admin-card">
-                <h2 class="section-title">📊 대시보드</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalCases">0</div>
-                        <div class="stat-label">총 치료 사례</div>
+            
+            <div class="form-group">
+                <label for="caseDescription">치료 설명</label>
+                <textarea id="caseDescription" rows="3" placeholder="치료 과정과 결과를 설명해주세요" required></textarea>
+            </div>
+            
+            <div class="image-upload">
+                <div class="upload-box" onclick="document.getElementById('beforeImage').click()">
+                    <input type="file" id="beforeImage" accept="image/*" onchange="previewImage(this, 'beforePreview')">
+                    <div id="beforePreview">
+                        <div class="upload-icon">📷</div>
+                        <h3>치료 전 사진</h3>
+                        <p>클릭해서 업로드</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalUsers">0</div>
-                        <div class="stat-label">총 회원 수</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">49,000+</div>
-                        <div class="stat-label">비수술 치료 성공</div>
+                </div>
+                
+                <div class="upload-box" onclick="document.getElementById('afterImage').click()">
+                    <input type="file" id="afterImage" accept="image/*" onchange="previewImage(this, 'afterPreview')">
+                    <div id="afterPreview">
+                        <div class="upload-icon">📷</div>
+                        <h3>치료 후 사진</h3>
+                        <p>클릭해서 업로드</p>
                     </div>
                 </div>
             </div>
-
-            <!-- 치료 사례 업로드 -->
-            <div class="admin-card">
-                <h2 class="section-title">📷 치료 사례 업로드</h2>
-                <div id="uploadMessage" class="message"></div>
-                
-                <div class="upload-grid">
-                    <div>
-                        <label class="form-label">치료 전 사진</label>
-                        <div class="upload-area" onclick="document.getElementById('beforeInput').click()">
-                            <div id="beforePlaceholder">
-                                <div style="font-size: 3rem; margin-bottom: 10px;">📷</div>
-                                <p>치료 전 사진<br>클릭하여 업로드</p>
-                            </div>
-                            <img id="beforePreview" class="preview-image" style="display: none;">
-                        </div>
-                        <input type="file" id="beforeInput" accept="image/*" style="display: none;" onchange="handleImageUpload(this, 'before')">
-                    </div>
-                    
-                    <div>
-                        <label class="form-label">치료 후 사진</label>
-                        <div class="upload-area" onclick="document.getElementById('afterInput').click()">
-                            <div id="afterPlaceholder">
-                                <div style="font-size: 3rem; margin-bottom: 10px;">📷</div>
-                                <p>치료 후 사진<br>클릭하여 업로드</p>
-                            </div>
-                            <img id="afterPreview" class="preview-image" style="display: none;">
-                        </div>
-                        <input type="file" id="afterInput" accept="image/*" style="display: none;" onchange="handleImageUpload(this, 'after')">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">치료 제목</label>
-                    <input type="text" id="caseTitle" class="form-input" placeholder="예: 석회성건염 체외충격파 치료">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">치료 설명</label>
-                    <textarea id="caseDescription" class="form-textarea" placeholder="예: 3개월간의 체외충격파 치료로 석회가 완전히 제거되어 어깨 통증이 사라졌습니다."></textarea>
-                </div>
-                
-                <div style="text-align: center;">
-                    <button onclick="uploadTreatmentCase()" class="btn btn-success" style="margin-right: 10px;">💾 사례 업로드</button>
-                    <button onclick="clearForm()" class="btn btn-secondary">🗑️ 폼 초기화</button>
-                </div>
+            
+            <div style="text-align: center; margin-top: 25px;">
+                <button type="submit" class="btn" id="submitBtn">
+                    치료 사례 업로드
+                </button>
             </div>
-
-            <!-- 기존 치료 사례 관리 -->
-            <div class="admin-card">
-                <h2 class="section-title">📋 기존 치료 사례 관리</h2>
-                <button onclick="loadCases()" class="btn btn-primary" style="margin-bottom: 20px;">🔄 새로고침</button>
-                <div id="casesContainer" class="cases-grid">
-                    <p style="text-align: center; color: #666; grid-column: 1 / -1;">치료 사례를 불러오는 중...</p>
-                </div>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>업로드 중...</p>
+        </div>
+        
+        <div class="cases-list">
+            <h2>등록된 치료 사례</h2>
+            <div id="casesList">
+                <!-- 치료 사례 목록이 여기에 표시됩니다 -->
             </div>
         </div>
     </div>
 
     <script type="module">
-        // Supabase 설정
         import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2'
-        
+
+        // Supabase 설정
         const supabaseUrl = 'https://jkxtsvwrxqfpjxvqyuex.supabase.co'
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpreHRzdndyeHFmcGp4dnF5dWV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MzQ5MjksImV4cCI6MjA2ODUxMDkyOX0.htnGzSIOl5ya5dwYPgNzF-7pRaMEyjse95HqREcEvr0'
         
         const supabase = createClient(supabaseUrl, supabaseKey)
-        
-        let currentUser = null
-        let beforeImageData = null
-        let afterImageData = null
-        
-        // 전역 함수로 노출
-        window.supabase = supabase
-        
-        // 메시지 표시
-        function showMessage(message, type = 'info', containerId = 'uploadMessage') {
-            const messageEl = document.getElementById(containerId)
-            messageEl.textContent = message
-            messageEl.className = `message ${type}`
-            messageEl.style.display = 'block'
+
+        // 메시지 표시 함수
+        function showMessage(text, type = 'success') {
+            const messageDiv = document.getElementById('message')
+            messageDiv.textContent = text
+            messageDiv.className = `message ${type}`
+            messageDiv.style.display = 'block'
             
             setTimeout(() => {
-                messageEl.style.display = 'none'
+                messageDiv.style.display = 'none'
             }, 5000)
         }
-        
-        // 관리자 로그인
-        window.handleAdminLogin = async function() {
-            const email = document.getElementById('adminEmail').value.trim()
-            const password = document.getElementById('adminPassword').value.trim()
+
+        // 이미지 미리보기
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId)
+            const uploadBox = input.closest('.upload-box')
             
-            if (!email || !password) {
-                showMessage('이메일과 비밀번호를 입력해주세요.', 'error', 'loginMessage')
+            if (input.files && input.files[0]) {
+                const reader = new FileReader()
+                reader.onload = function(e) {
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" alt="미리보기" class="preview-image">
+                        <p>✅ 이미지 선택됨</p>
+                    `
+                    uploadBox.classList.add('has-image')
+                }
+                reader.readAsDataURL(input.files[0])
+            }
+        }
+
+        // 이미지를 Base64로 변환
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader()
+                reader.readAsDataURL(file)
+                reader.onload = () => resolve(reader.result)
+                reader.onerror = error => reject(error)
+            })
+        }
+
+        // 폼 제출 처리
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault()
+            
+            const title = document.getElementById('caseTitle').value
+            const description = document.getElementById('caseDescription').value
+            const beforeImageFile = document.getElementById('beforeImage').files[0]
+            const afterImageFile = document.getElementById('afterImage').files[0]
+            
+            if (!beforeImageFile || !afterImageFile) {
+                showMessage('치료 전후 사진을 모두 선택해주세요.', 'error')
                 return
             }
+            
+            // 로딩 표시
+            document.getElementById('loading').style.display = 'block'
+            document.getElementById('submitBtn').disabled = true
             
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password
-                })
+                // 이미지를 Base64로 변환 (간단한 방법)
+                const beforeImageBase64 = await fileToBase64(beforeImageFile)
+                const afterImageBase64 = await fileToBase64(afterImageFile)
                 
-                if (error) throw error
-                
-                // 관리자 권한 확인
-                const { data: adminData, error: adminError } = await supabase
-                    .from('admin_users')
-                    .select('*')
-                    .eq('user_id', data.user.id)
-                    .single()
-                
-                if (adminError || !adminData) {
-                    await supabase.auth.signOut()
-                    throw new Error('관리자 권한이 없습니다.')
-                }
-                
-                currentUser = data.user
-                document.getElementById('loginForm').style.display = 'none'
-                document.getElementById('adminPanel').style.display = 'block'
-                document.getElementById('adminEmailDisplay').textContent = email
-                
-                showMessage('관리자 로그인 성공!', 'success')
-                loadCases()
-                loadStats()
-                
-            } catch (error) {
-                showMessage(error.message, 'error', 'loginMessage')
-            }
-        }
-        
-        // 로그아웃
-        window.handleLogout = async function() {
-            await supabase.auth.signOut()
-            currentUser = null
-            document.getElementById('loginForm').style.display = 'block'
-            document.getElementById('adminPanel').style.display = 'none'
-            document.getElementById('adminEmail').value = ''
-            document.getElementById('adminPassword').value = ''
-        }
-        
-        // 이미지 업로드 처리
-        window.handleImageUpload = function(input, type) {
-            const file = input.files[0]
-            if (!file) return
-            
-            if (file.size > 5 * 1024 * 1024) {
-                showMessage('파일 크기는 5MB 이하로 선택해주세요.', 'error')
-                return
-            }
-            
-            if (!file.type.startsWith('image/')) {
-                showMessage('이미지 파일만 업로드 가능합니다.', 'error')
-                return
-            }
-            
-            const reader = new FileReader()
-            reader.onload = function(e) {
-                const imageData = e.target.result
-                
-                if (type === 'before') {
-                    beforeImageData = imageData
-                    document.getElementById('beforePreview').src = imageData
-                    document.getElementById('beforePreview').style.display = 'block'
-                    document.getElementById('beforePlaceholder').style.display = 'none'
-                } else {
-                    afterImageData = imageData
-                    document.getElementById('afterPreview').src = imageData
-                    document.getElementById('afterPreview').style.display = 'block'
-                    document.getElementById('afterPlaceholder').style.display = 'none'
-                }
-                
-                showMessage(`${type === 'before' ? '치료 전' : '치료 후'} 사진이 업로드되었습니다.`, 'success')
-            }
-            
-            reader.readAsDataURL(file)
-        }
-        
-        // 치료 사례 업로드
-        window.uploadTreatmentCase = async function() {
-            const title = document.getElementById('caseTitle').value.trim()
-            const description = document.getElementById('caseDescription').value.trim()
-            
-            if (!title || !description || !beforeImageData || !afterImageData) {
-                showMessage('모든 필드를 입력해주세요.', 'error')
-                return
-            }
-            
-            try {
-                showMessage('업로드 중...', 'info')
-                
+                // Supabase에 저장
                 const { data, error } = await supabase
                     .from('treatment_cases')
-                    .insert([{
-                        title,
-                        description,
-                        before_image: beforeImageData,
-                        after_image: afterImageData,
-                        created_by: currentUser.id
-                    }])
+                    .insert([
+                        {
+                            title: title,
+                            description: description,
+                            before_image: beforeImageBase64,
+                            after_image: afterImageBase64,
+                            created_at: new Date().toISOString()
+                        }
+                    ])
                 
                 if (error) throw error
                 
-                showMessage('✅ 치료 사례가 성공적으로 업로드되었습니다!', 'success')
-                clearForm()
+                showMessage('치료 사례가 성공적으로 업로드되었습니다!', 'success')
+                
+                // 폼 초기화
+                document.getElementById('uploadForm').reset()
+                document.getElementById('beforePreview').innerHTML = `
+                    <div class="upload-icon">📷</div>
+                    <h3>치료 전 사진</h3>
+                    <p>클릭해서 업로드</p>
+                `
+                document.getElementById('afterPreview').innerHTML = `
+                    <div class="upload-icon">📷</div>
+                    <h3>치료 후 사진</h3>
+                    <p>클릭해서 업로드</p>
+                `
+                document.querySelectorAll('.upload-box').forEach(box => {
+                    box.classList.remove('has-image')
+                })
+                
+                // 목록 새로고침
                 loadCases()
-                loadStats()
                 
             } catch (error) {
-                showMessage('업로드 실패: ' + error.message, 'error')
+                console.error('업로드 실패:', error)
+                showMessage('업로드 중 오류가 발생했습니다: ' + error.message, 'error')
+            } finally {
+                document.getElementById('loading').style.display = 'none'
+                document.getElementById('submitBtn').disabled = false
             }
-        }
-        
-        // 폼 초기화
-        window.clearForm = function() {
-            document.getElementById('caseTitle').value = ''
-            document.getElementById('caseDescription').value = ''
-            document.getElementById('beforeInput').value = ''
-            document.getElementById('afterInput').value = ''
-            
-            document.getElementById('beforePreview').style.display = 'none'
-            document.getElementById('afterPreview').style.display = 'none'
-            document.getElementById('beforePlaceholder').style.display = 'block'
-            document.getElementById('afterPlaceholder').style.display = 'block'
-            
-            beforeImageData = null
-            afterImageData = null
-        }
-        
+        })
+
         // 치료 사례 목록 로드
-        window.loadCases = async function() {
+        async function loadCases() {
             try {
                 const { data, error } = await supabase
                     .from('treatment_cases')
@@ -571,103 +401,58 @@
                 
                 if (error) throw error
                 
-                const container = document.getElementById('casesContainer')
+                const casesList = document.getElementById('casesList')
                 
                 if (data.length === 0) {
-                    container.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1 / -1;">등록된 치료 사례가 없습니다.</p>'
+                    casesList.innerHTML = '<p>아직 등록된 치료 사례가 없습니다.</p>'
                     return
                 }
                 
-                container.innerHTML = data.map(case_ => `
-                    <div class="case-card">
-                        <div class="case-images">
-                            <img src="${case_.before_image}" alt="치료 전" class="case-image">
-                            <img src="${case_.after_image}" alt="치료 후" class="case-image">
+                casesList.innerHTML = data.map(case_ => `
+                    <div class="case-item">
+                        <img src="${case_.before_image}" alt="치료 전" class="case-thumbnail">
+                        <img src="${case_.after_image}" alt="치료 후" class="case-thumbnail">
+                        <div>
+                            <h4>${case_.title}</h4>
+                            <p>${case_.description}</p>
+                            <small>등록일: ${new Date(case_.created_at).toLocaleDateString()}</small>
                         </div>
-                        <div class="case-content">
-                            <div class="case-title">${case_.title}</div>
-                            <div class="case-description">${case_.description}</div>
-                            <div style="font-size: 0.8rem; color: #999; margin-bottom: 10px;">
-                                등록일: ${new Date(case_.created_at).toLocaleDateString()}
-                            </div>
-                            <div class="case-actions">
-                                <button onclick="deleteCase('${case_.id}')" class="btn btn-danger" style="font-size: 0.8rem; padding: 6px 12px;">삭제</button>
-                            </div>
-                        </div>
+                        <button class="delete-btn" onclick="deleteCase('${case_.id}')">삭제</button>
                     </div>
                 `).join('')
                 
             } catch (error) {
-                document.getElementById('casesContainer').innerHTML = 
-                    '<p style="text-align: center; color: #666; grid-column: 1 / -1;">데이터를 불러오는 중 오류가 발생했습니다.</p>'
+                console.error('목록 로드 실패:', error)
+                showMessage('목록을 불러오는 중 오류가 발생했습니다.', 'error')
             }
         }
-        
+
         // 치료 사례 삭제
-        window.deleteCase = async function(caseId) {
-            if (!confirm('정말로 이 치료 사례를 삭제하시겠습니까?')) return
+        window.deleteCase = async function(id) {
+            if (!confirm('정말 삭제하시겠습니까?')) return
             
             try {
                 const { error } = await supabase
                     .from('treatment_cases')
                     .delete()
-                    .eq('id', caseId)
+                    .eq('id', id)
                 
                 if (error) throw error
                 
                 showMessage('치료 사례가 삭제되었습니다.', 'success')
                 loadCases()
-                loadStats()
                 
             } catch (error) {
-                showMessage('삭제 실패: ' + error.message, 'error')
+                console.error('삭제 실패:', error)
+                showMessage('삭제 중 오류가 발생했습니다.', 'error')
             }
         }
-        
-        // 통계 로드
-        async function loadStats() {
-            try {
-                const { count: casesCount } = await supabase
-                    .from('treatment_cases')
-                    .select('*', { count: 'exact', head: true })
-                
-                const { count: usersCount } = await supabase
-                    .from('user_profiles')
-                    .select('*', { count: 'exact', head: true })
-                
-                document.getElementById('totalCases').textContent = casesCount || 0
-                document.getElementById('totalUsers').textContent = usersCount || 0
-                
-            } catch (error) {
-                console.error('통계 로드 실패:', error)
-            }
-        }
-        
-        // 페이지 로드 시 세션 확인
-        document.addEventListener('DOMContentLoaded', async function() {
-            const { data: { session } } = await supabase.auth.getSession()
-            
-            if (session) {
-                try {
-                    const { data: adminData } = await supabase
-                        .from('admin_users')
-                        .select('*')
-                        .eq('user_id', session.user.id)
-                        .single()
-                    
-                    if (adminData) {
-                        currentUser = session.user
-                        document.getElementById('loginForm').style.display = 'none'
-                        document.getElementById('adminPanel').style.display = 'block'
-                        document.getElementById('adminEmailDisplay').textContent = session.user.email
-                        loadCases()
-                        loadStats()
-                    }
-                } catch (error) {
-                    console.log('관리자 권한 확인 실패')
-                }
-            }
-        })
+
+        // 전역 함수로 노출
+        window.previewImage = previewImage
+
+        // 페이지 로드 시 목록 불러오기
+        loadCases()
     </script>
 </body>
 </html>
