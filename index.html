@@ -1480,6 +1480,9 @@ async loadTreatmentCases() {
             // Supabase 초기화 시도
             await initSupabase()
             
+            // 원장님 프로필 로드 (이 줄이 새로 추가!)
+            loadDirectorProfile()
+            
             console.log('✅ 웹사이트 초기화 완료')
         })
 
