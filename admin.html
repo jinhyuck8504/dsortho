@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>관리자 - 치료 사례 업로드</title>
+    <title>관리자 - 사이트 관리</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -20,12 +20,8 @@
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
         
         .header {
@@ -33,6 +29,10 @@
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 2px solid #1a237e;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
         
         .header h1 {
@@ -40,14 +40,44 @@
             margin-bottom: 10px;
         }
         
-        .upload-form {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 10px;
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
             margin-bottom: 30px;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
-        .form-group {
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            background: #1a237e;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+.form-group {
             margin-bottom: 20px;
         }
         
@@ -74,10 +104,43 @@
             border-color: #1a237e;
         }
         
-        .image-upload {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+        .profile-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .profile-preview {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #1a237e;
+            object-fit: cover;
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #1a237e;
+        }
+        
+        .profile-info h3 {
+            color: #1a237e;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .profile-info p {
+            color: #666;
+            margin-bottom: 5px;
         }
         
         .upload-box {
@@ -87,7 +150,7 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            min-height: 200px;
+            min-height: 150px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -119,7 +182,12 @@
             margin-bottom: 10px;
         }
         
-        .btn {
+        .image-upload {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+.btn {
             background: #1a237e;
             color: white;
             padding: 12px 30px;
@@ -142,8 +210,16 @@
             transform: none;
         }
         
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
         .cases-list {
-            margin-top: 40px;
+            margin-top: 30px;
         }
         
         .case-item {
@@ -215,66 +291,128 @@
     </style>
 </head>
 <body>
-    <div class="container">
+<div class="container">
         <div class="header">
-            <h1>🏥 치료 사례 업로드</h1>
-            <p>대치삼성정형외과 관리자 페이지</p>
+            <h1>🏥 대치삼성정형외과 관리자</h1>
+            <p>사이트 콘텐츠 관리 시스템</p>
+        </div>
+        
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="showTab('profile')">👨‍⚕️ 원장님 프로필</button>
+            <button class="tab-btn" onclick="showTab('cases')">📸 치료 사례</button>
         </div>
         
         <div id="message" class="message"></div>
         
-        <form id="uploadForm" class="upload-form">
-            <div class="form-group">
-                <label for="caseTitle">치료 사례 제목</label>
-                <input type="text" id="caseTitle" placeholder="예: 석회성건염 체외충격파 치료" required>
+        <!-- 원장님 프로필 탭 -->
+        <div id="profileTab" class="tab-content active">
+            <h2>👨‍⚕️ 원장님 프로필 관리</h2>
+            
+            <div class="profile-section">
+                <h3>현재 프로필 미리보기</h3>
+                <div class="profile-preview" id="profilePreview">
+                    <div class="profile-image" id="currentProfileImage">
+                        👨‍⚕️
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="currentProfileName">양형섭 원장</h3>
+                        <p id="currentProfileTitle">대치삼성정형외과 원장</p>
+                        <p id="currentProfileMessage">우리 가족 주치의로서 최선을 다하겠습니다.</p>
+                    </div>
+                </div>
             </div>
             
-            <div class="form-group">
-                <label for="caseDescription">치료 설명</label>
-                <textarea id="caseDescription" rows="3" placeholder="치료 과정과 결과를 설명해주세요" required></textarea>
-            </div>
-            
-            <div class="image-upload">
-                <div class="upload-box" onclick="document.getElementById('beforeImage').click()">
-                    <input type="file" id="beforeImage" accept="image/*" onchange="previewImage(this, 'beforePreview')">
-                    <div id="beforePreview">
-                        <div class="upload-icon">📷</div>
-                        <h3>치료 전 사진</h3>
-                        <p>클릭해서 업로드</p>
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="profileName">원장님 성함</label>
+                    <input type="text" id="profileName" value="양형섭 원장" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="profileTitle">직책</label>
+                    <input type="text" id="profileTitle" value="대치삼성정형외과 원장" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="profileMessage">원장님 메시지</label>
+                    <textarea id="profileMessage" rows="3" required>대치삼성정형외과의원은 비수술 치료 중심의 정형외과입니다.
+'우리 가족 주치의'라는 철학 아래, 자녀부터 부모님까지 세대를 아우르는 건강관리를 도와드립니다.</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>원장님 프로필 사진</label>
+                    <div class="upload-box" onclick="document.getElementById('profilePhoto').click()">
+                        <input type="file" id="profilePhoto" accept="image/*" onchange="previewProfileImage(this)">
+                        <div id="profilePhotoPreview">
+                            <div class="upload-icon">👨‍⚕️</div>
+                            <h3>프로필 사진 업로드</h3>
+                            <p>클릭해서 사진 선택</p>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="upload-box" onclick="document.getElementById('afterImage').click()">
-                    <input type="file" id="afterImage" accept="image/*" onchange="previewImage(this, 'afterPreview')">
-                    <div id="afterPreview">
-                        <div class="upload-icon">📷</div>
-                        <h3>치료 후 사진</h3>
-                        <p>클릭해서 업로드</p>
+                <div style="text-align: center; margin-top: 25px; display: flex; gap: 15px; justify-content: center;">
+                    <button type="submit" class="btn">프로필 업데이트</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetProfile()">초기화</button>
+                </div>
+            </form>
+        </div>
+<!-- 치료 사례 탭 -->
+        <div id="casesTab" class="tab-content">
+            <h2>📸 치료 사례 관리</h2>
+            
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="caseTitle">치료 사례 제목</label>
+                    <input type="text" id="caseTitle" placeholder="예: 석회성건염 체외충격파 치료" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="caseDescription">치료 설명</label>
+                    <textarea id="caseDescription" rows="3" placeholder="치료 과정과 결과를 설명해주세요" required></textarea>
+                </div>
+                
+                <div class="image-upload">
+                    <div class="upload-box" onclick="document.getElementById('beforeImage').click()">
+                        <input type="file" id="beforeImage" accept="image/*" onchange="previewImage(this, 'beforePreview')">
+                        <div id="beforePreview">
+                            <div class="upload-icon">📷</div>
+                            <h3>치료 전 사진</h3>
+                            <p>클릭해서 업로드</p>
+                        </div>
+                    </div>
+                    
+                    <div class="upload-box" onclick="document.getElementById('afterImage').click()">
+                        <input type="file" id="afterImage" accept="image/*" onchange="previewImage(this, 'afterPreview')">
+                        <div id="afterPreview">
+                            <div class="upload-icon">📷</div>
+                            <h3>치료 후 사진</h3>
+                            <p>클릭해서 업로드</p>
+                        </div>
                     </div>
                 </div>
+                
+                <div style="text-align: center; margin-top: 25px;">
+                    <button type="submit" class="btn" id="submitBtn">
+                        치료 사례 업로드
+                    </button>
+                </div>
+            </form>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>업로드 중...</p>
             </div>
             
-            <div style="text-align: center; margin-top: 25px;">
-                <button type="submit" class="btn" id="submitBtn">
-                    치료 사례 업로드
-                </button>
-            </div>
-        </form>
-        
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>업로드 중...</p>
-        </div>
-        
-        <div class="cases-list">
-            <h2>등록된 치료 사례</h2>
-            <div id="casesList">
-                <!-- 치료 사례 목록이 여기에 표시됩니다 -->
+            <div class="cases-list">
+                <h3>등록된 치료 사례</h3>
+                <div id="casesList">
+                    <!-- 치료 사례 목록이 여기에 표시됩니다 -->
+                </div>
             </div>
         </div>
     </div>
-
-    <script type="module">
+<script type="module">
         import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2'
 
         // Supabase 설정
@@ -282,6 +420,22 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpreHRzdndyeHFmcGp4dnF5dWV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MzQ5MjksImV4cCI6MjA2ODUxMDkyOX0.htnGzSIOl5ya5dwYPgNzF-7pRaMEyjse95HqREcEvr0'
         
         const supabase = createClient(supabaseUrl, supabaseKey)
+
+        // 탭 전환
+        function showTab(tabName) {
+            // 모든 탭 버튼과 콘텐츠 비활성화
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'))
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'))
+            
+            // 선택된 탭 활성화
+            event.target.classList.add('active')
+            document.getElementById(tabName + 'Tab').classList.add('active')
+            
+            // 치료 사례 탭이면 목록 로드
+            if (tabName === 'cases') {
+                loadCases()
+            }
+        }
 
         // 메시지 표시 함수
         function showMessage(text, type = 'success') {
@@ -295,7 +449,29 @@
             }, 5000)
         }
 
-        // 이미지 미리보기
+        // 프로필 사진 미리보기
+        function previewProfileImage(input) {
+            const preview = document.getElementById('profilePhotoPreview')
+            const uploadBox = input.closest('.upload-box')
+            const currentImage = document.getElementById('currentProfileImage')
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader()
+                reader.onload = function(e) {
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" alt="미리보기" class="preview-image">
+                        <p>✅ 사진 선택됨</p>
+                    `
+                    uploadBox.classList.add('has-image')
+                    
+                    // 현재 프로필 미리보기도 업데이트
+                    currentImage.innerHTML = `<img src="${e.target.result}" alt="프로필 사진" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+                }
+                reader.readAsDataURL(input.files[0])
+            }
+        }
+
+        // 치료 사례 이미지 미리보기
         function previewImage(input, previewId) {
             const preview = document.getElementById(previewId)
             const uploadBox = input.closest('.upload-box')
@@ -322,8 +498,66 @@
                 reader.onerror = error => reject(error)
             })
         }
+// 프로필 업데이트
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault()
+            
+            const name = document.getElementById('profileName').value
+            const title = document.getElementById('profileTitle').value
+            const message = document.getElementById('profileMessage').value
+            const photoFile = document.getElementById('profilePhoto').files[0]
+            
+            try {
+                let photoBase64 = null
+                if (photoFile) {
+                    photoBase64 = await fileToBase64(photoFile)
+                }
+                
+                // Supabase에 프로필 정보 저장 (또는 업데이트)
+                const profileData = {
+                    name: name,
+                    title: title,
+                    message: message,
+                    photo: photoBase64,
+                    updated_at: new Date().toISOString()
+                }
+                
+                // 기존 프로필이 있는지 확인
+                const { data: existing } = await supabase
+                    .from('director_profile')
+                    .select('id')
+                    .limit(1)
+                
+                let result
+                if (existing && existing.length > 0) {
+                    // 업데이트
+                    result = await supabase
+                        .from('director_profile')
+                        .update(profileData)
+                        .eq('id', existing[0].id)
+                } else {
+                    // 새로 삽입
+                    result = await supabase
+                        .from('director_profile')
+                        .insert([profileData])
+                }
+                
+                if (result.error) throw result.error
+                
+                showMessage('프로필이 성공적으로 업데이트되었습니다!', 'success')
+                
+                // 미리보기 업데이트
+                document.getElementById('currentProfileName').textContent = name
+                document.getElementById('currentProfileTitle').textContent = title
+                document.getElementById('currentProfileMessage').textContent = message
+                
+            } catch (error) {
+                console.error('프로필 업데이트 실패:', error)
+                showMessage('프로필 업데이트 중 오류가 발생했습니다: ' + error.message, 'error')
+            }
+        })
 
-        // 폼 제출 처리
+        // 치료 사례 폼 제출 처리
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault()
             
@@ -342,7 +576,7 @@
             document.getElementById('submitBtn').disabled = true
             
             try {
-                // 이미지를 Base64로 변환 (간단한 방법)
+                // 이미지를 Base64로 변환
                 const beforeImageBase64 = await fileToBase64(beforeImageFile)
                 const afterImageBase64 = await fileToBase64(afterImageFile)
                 
@@ -390,8 +624,7 @@
                 document.getElementById('submitBtn').disabled = false
             }
         })
-
-        // 치료 사례 목록 로드
+// 치료 사례 목록 로드
         async function loadCases() {
             try {
                 const { data, error } = await supabase
@@ -448,11 +681,53 @@
             }
         }
 
-        // 전역 함수로 노출
-        window.previewImage = previewImage
+        // 프로필 초기화
+        function resetProfile() {
+            document.getElementById('profileName').value = '양형섭 원장'
+            document.getElementById('profileTitle').value = '대치삼성정형외과 원장'
+            document.getElementById('profileMessage').value = '대치삼성정형외과의원은 비수술 치료 중심의 정형외과입니다.\n\'우리 가족 주치의\'라는 철학 아래, 자녀부터 부모님까지 세대를 아우르는 건강관리를 도와드립니다.'
+            document.getElementById('profilePhoto').value = ''
+            document.getElementById('profilePhotoPreview').innerHTML = `
+                <div class="upload-icon">👨‍⚕️</div>
+                <h3>프로필 사진 업로드</h3>
+                <p>클릭해서 사진 선택</p>
+            `
+            document.getElementById('currentProfileImage').innerHTML = '👨‍⚕️'
+        }
 
-        // 페이지 로드 시 목록 불러오기
-        loadCases()
+        // 전역 함수로 노출
+        window.showTab = showTab
+        window.previewImage = previewImage
+        window.previewProfileImage = previewProfileImage
+        window.resetProfile = resetProfile
+
+        // 페이지 로드 시 프로필 정보 로드
+        async function loadProfile() {
+            try {
+                const { data, error } = await supabase
+                    .from('director_profile')
+                    .select('*')
+                    .limit(1)
+                
+                if (error) throw error
+                
+                if (data && data.length > 0) {
+                    const profile = data[0]
+                    document.getElementById('profileName').value = profile.name || '양형섭 원장'
+                    document.getElementById('profileTitle').value = profile.title || '대치삼성정형외과 원장'
+                    document.getElementById('profileMessage').value = profile.message || ''
+                    
+                    if (profile.photo) {
+                        document.getElementById('currentProfileImage').innerHTML = `<img src="${profile.photo}" alt="프로필 사진" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+                    }
+                }
+            } catch (error) {
+                console.error('프로필 로드 실패:', error)
+            }
+        }
+
+        // 페이지 로드 시 실행
+        loadProfile()
     </script>
 </body>
 </html>
