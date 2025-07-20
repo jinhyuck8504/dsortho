@@ -961,433 +961,568 @@
             </p>
         </div>
     </footer>
-<script>
-        // ⚠️ 여기에 실제 Supabase 정보를 입력하세요
-const SUPABASE_URL = 'https://jkxtsvwrxqfpjxvqyuex.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpreHRzdndyeHFmcGp4dnF5dWV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MzQ5MjksImV4cCI6MjA2ODUxMDkyOX0.htnGzSIOl5ya5dwYPgNzF-7pRaMEyjse95HqREcEvr0';
+<script type="module">
+        // ===========================================
+        // 대치삼성정형외과 웹사이트 JavaScript
+        // ===========================================
+        
+        // Supabase 연동
+        import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2'
 
-        // 전역 변수
-        let supabase = null;
-        let currentUser = null;
-        let isAuthenticated = false;
+        // Supabase 설정 (실제 값 유지)
+        const supabaseUrl = 'https://jkxtsvwrxqfpjxvqyuex.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpreHRzdndyeHFmcGp4dnF5dWV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MzQ5MjksImV4cCI6MjA2ODUxMDkyOX0.htnGzSIOl5ya5dwYPgNzF-7pRaMEyjse95HqREcEvr0'
 
+        let supabase = null
+        let authManager = null
+
+        // ===========================================
         // Supabase 초기화
+        // ===========================================
         async function initSupabase() {
-            // URL과 KEY가 설정되지 않은 경우 데모 모드
-            if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
-                console.warn('⚠️ Supabase 설정이 필요합니다.');
-                showMessage('현재 데모 모드입니다. 실제 회원가입을 위해서는 Supabase 설정이 필요합니다.', 'info');
-                return false;
-            }
-
             try {
-                // Supabase 동적 로드
-                const { createClient } = await import('https://cdn.skypack.dev/@supabase/supabase-js@2');
-                supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                
-                console.log('✅ Supabase 초기화 성공');
-                
-                // 기존 세션 확인
-                const { data: { session } } = await supabase.auth.getSession();
-                if (session) {
-                    currentUser = session.user;
-                    isAuthenticated = true;
-                    updateUIForAuthenticatedUser();
-                }
-
-                // 인증 상태 변경 감지
-                supabase.auth.onAuthStateChange((event, session) => {
-                    console.log('Auth state changed:', event);
-                    
-                    if (session) {
-                        currentUser = session.user;
-                        isAuthenticated = true;
-                        updateUIForAuthenticatedUser();
-                    } else {
-                        currentUser = null;
-                        isAuthenticated = false;
-                        updateUIForUnauthenticatedUser();
-                    }
-                });
-
-                return true;
+                supabase = createClient(supabaseUrl, supabaseKey)
+                authManager = new SimpleAuthManager()
+                await authManager.init()
+                console.log('✅ Supabase 초기화 성공')
+                return true
             } catch (error) {
-                console.error('❌ Supabase 초기화 실패:', error);
-                showMessage('Supabase 연결에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
-                return false;
+                console.error('❌ Supabase 초기화 실패:', error)
+                return false
             }
         }
 
-        // 회원가입 처리
-        async function handleSignUp() {
-            const email = document.getElementById('authEmail')?.value;
-            const password = document.getElementById('authPassword')?.value;
-
-            if (!email || !password) {
-                showMessage('이메일과 비밀번호를 입력해주세요.', 'error');
-                return;
-            }
-
-            if (password.length < 6) {
-                showMessage('비밀번호는 최소 6자 이상이어야 합니다.', 'error');
-                return;
-            }
-
-            if (!supabase) {
-                showMessage('Supabase가 초기화되지 않았습니다.', 'error');
-                return;
-            }
-
-            try {
-                showMessage('회원가입 처리 중...', 'info');
-                
-                const { data, error } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            source: '대치삼성정형외과_웹사이트'
-                        }
-                    }
-                });
-
-                if (error) throw error;
-
-                showMessage('회원가입이 완료되었습니다! 이메일을 확인하여 계정을 활성화해주세요.', 'success');
-                
-                // 입력 필드 초기화
-                document.getElementById('authEmail').value = '';
-                document.getElementById('authPassword').value = '';
-
-            } catch (error) {
-                console.error('회원가입 실패:', error);
-                showMessage(getErrorMessage(error), 'error');
-            }
-        }
-
-        // 로그인 처리
-        async function handleSignIn() {
-            const email = document.getElementById('authEmail')?.value;
-            const password = document.getElementById('authPassword')?.value;
-
-            if (!email || !password) {
-                showMessage('이메일과 비밀번호를 입력해주세요.', 'error');
-                return;
-            }
-
-            if (!supabase) {
-                showMessage('Supabase가 초기화되지 않았습니다.', 'error');
-                return;
-            }
-
-            try {
-                showMessage('로그인 처리 중...', 'info');
-                
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password
-                });
-
-                if (error) throw error;
-
-                showMessage('로그인에 성공했습니다!', 'success');
-                
-                // 입력 필드 초기화
-                document.getElementById('authEmail').value = '';
-                document.getElementById('authPassword').value = '';
-
-            } catch (error) {
-                console.error('로그인 실패:', error);
-                showMessage(getErrorMessage(error), 'error');
-            }
-        }
-
-        // 비밀번호 재설정
-        async function handleResetPassword() {
-            const email = document.getElementById('authEmail')?.value;
-            if (!email) {
-                showMessage('이메일을 입력해주세요.', 'error');
-                return;
-            }
-            if (!supabase) {
-                showMessage('Supabase가 초기화되지 않았습니다.', 'error');
-                return;
-            }
-            try {
-                const { error } = await supabase.auth.resetPasswordForEmail(email);
-                if (error) throw error;
-                showMessage('비밀번호 재설정 이메일이 전송되었습니다.', 'success');
-            } catch (error) {
-                console.error('비밀번호 재설정 실패:', error);
-                showMessage(getErrorMessage(error), 'error');
-            }
-        }
-
-        // 이메일로 시작하기
-        async function handleEmailStart() {
-            const loginResult = await handleSignIn();
-            if (!loginResult) {
-                await handleSignUp();
-            }
-        }
-
-        // 로그아웃
-        async function handleSignOut() {
-            if (!supabase) return;
-            try {
-                await supabase.auth.signOut();
-                showMessage('로그아웃되었습니다.', 'success');
-            } catch (error) {
-                console.error('로그아웃 실패:', error);
-            }
-        }
-
-        // 인증된 사용자 UI 업데이트
-        function updateUIForAuthenticatedUser() {
-            console.log('✅ 인증된 사용자 UI 업데이트');
-            
-            const loginRequired = document.querySelector('.login-required');
-            if (loginRequired && currentUser) {
-                loginRequired.innerHTML = `
-                    <div style="text-align: center;">
-                        <h3>환영합니다! ${currentUser.email}님</h3>
-                        <p>실제 환자분들의 치료 전후 사진을 확인하실 수 있습니다.</p>
-                        <div style="margin-top: 20px;">
-                            <button onclick="handleSignOut()" class="btn" style="background: #dc3545; color: white;">로그아웃</button>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            // 실제 치료 사례 로드
-            loadTreatmentCases();
-        }
-
-        // 미인증 사용자 UI 업데이트  
-        function updateUIForUnauthenticatedUser() {
-            console.log('🔒 미인증 사용자 UI 업데이트');
-            
-            const loginRequired = document.querySelector('.login-required');
-            if (loginRequired) {
-                loginRequired.innerHTML = `
-                    <h3>회원가입 후 확인 가능합니다</h3>
-                    <p>환자분들의 개인정보 보호를 위해 회원가입 후 열람 가능합니다.</p>
-                    <div class="login-form">
-                        <input type="email" id="authEmail" class="form-input" placeholder="이메일 주소" required>
-                        <input type="password" id="authPassword" class="form-input" placeholder="비밀번호 (최소 6자)" required>
-                        <div style="display: flex; gap: 10px;">
-                            <button onclick="handleSignIn()" class="btn btn-primary" style="flex: 1;">로그인</button>
-                            <button onclick="handleSignUp()" class="btn" style="background: #28a745; color: white; flex: 1;">회원가입</button>
-                        </div>
-                        <button onclick="handleResetPassword()" style="background: none; border: none; color: #666; text-decoration: underline; margin-top: 10px; cursor: pointer;">비밀번호를 잊으셨나요?</button>
-                    </div>
-                    <div id="authMessage" class="auth-message"></div>
-                `;
-            }
-        }
-
-        // 치료 사례 로드
-        async function loadTreatmentCases() {
-            if (!supabase || !isAuthenticated) {
-                console.log('🔒 미인증 상태 - 치료 사례 로드 불가');
-                return;
-            }
-
-            try {
-                const { data, error } = await supabase
-                    .from('treatment_cases')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-
-                console.log('📸 치료 사례 로드 성공:', data?.length || 0, '건');
-
-                const gallery = document.getElementById('beforeAfterGallery');
-                if (gallery && data && data.length > 0) {
-                    // 기존 예시 사례들을 실제 데이터로 교체
-                    gallery.innerHTML = data.map(case_ => `
-                        <div class="before-after-card">
-                            <div class="image-comparison">
-                                <div class="comparison-image">
-                                    <img src="${case_.before_image}" alt="치료 전" 
-                                         onerror="this.parentNode.innerHTML='<div style=\\"height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;color:#666;\\">이미지 로드 실패</div>'">
-                                    <div class="image-label before-label">BEFORE</div>
-                                </div>
-                                <div class="comparison-image">
-                                    <img src="${case_.after_image}" alt="치료 후"
-                                         onerror="this.parentNode.innerHTML='<div style=\\"height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;color:#666;\\">이미지 로드 실패</div>'">
-                                    <div class="image-label after-label">AFTER</div>
-                                </div>
-                            </div>
-                            <div class="case-content">
-                                <h4 class="case-title">${case_.title}</h4>
-                                <p class="case-description">${case_.description}</p>
-                                <p style="color: #999; font-size: 0.8rem; margin-top: 10px;">
-                                    등록일: ${new Date(case_.created_at).toLocaleDateString()}
-                                </p>
-                            </div>
-                        </div>
-                    `).join('');
-                } else {
-                    console.log('📸 저장된 치료 사례가 없음 - 예시 사례 유지');
-                }
-
-            } catch (error) {
-                console.error('❌ 치료 사례 로드 실패:', error);
-            }
-        }
-
-        // 에러 메시지 번역
-        function getErrorMessage(error) {
-            const errorMessages = {
-                'Invalid login credentials': '이메일 또는 비밀번호가 올바르지 않습니다.',
-                'User already registered': '이미 등록된 이메일입니다.',
-                'Password should be at least 6 characters': '비밀번호는 최소 6자 이상이어야 합니다.',
-                'Email not confirmed': '이메일 인증이 완료되지 않았습니다. 이메일을 확인해주세요.',
-                'Invalid email': '유효하지 않은 이메일 형식입니다.',
-                'Email rate limit exceeded': '이메일 전송 한도를 초과했습니다. 잠시 후 다시 시도해주세요.',
-                'Signup disabled': '현재 회원가입이 비활성화되어 있습니다.'
-            };
-            return errorMessages[error.message] || `오류가 발생했습니다: ${error.message}`;
-        }
-
-        // 메시지 표시
+        // ===========================================
+        // 메시지 표시 함수
+        // ===========================================
         function showMessage(message, type = 'info') {
-            const messageDiv = document.getElementById('authMessage');
-            if (messageDiv) {
-                messageDiv.textContent = message;
-                messageDiv.className = `auth-message ${type}`;
-                messageDiv.style.display = 'block';
+            // 기존 메시지 제거
+            const existingMessage = document.querySelector('.message-popup')
+            if (existingMessage) {
+                existingMessage.remove()
+            }
+
+            // 새 메시지 생성
+            const messageDiv = document.createElement('div')
+            messageDiv.className = `message-popup ${type}`
+            
+            const bgColor = type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 90px;
+                right: 20px;
+                background: ${bgColor};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                font-size: 14px;
+                max-width: 400px;
+                animation: slideIn 0.3s ease-out;
+            `
+            
+            messageDiv.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:white;margin-left:15px;cursor:pointer;font-size:16px;">✕</button>
+                </div>
+            `
+
+            // CSS 애니메이션 추가
+            if (!document.getElementById('messageStyles')) {
+                const style = document.createElement('style')
+                style.id = 'messageStyles'
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                `
+                document.head.appendChild(style)
+            }
+
+            document.body.appendChild(messageDiv)
+
+            // 5초 후 자동 제거
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.style.animation = 'slideIn 0.3s ease-out reverse'
+                    setTimeout(() => messageDiv.remove(), 300)
+                }
+            }, 5000)
+        }
+
+        // ===========================================
+        // 인증 관리자 클래스
+        // ===========================================
+        class SimpleAuthManager {
+            constructor() {
+                this.currentUser = null
+                this.isAuthenticated = false
+            }
+
+            async init() {
+                if (!supabase) return
+
+                try {
+                    // 현재 세션 확인
+                    const { data: { session } } = await supabase.auth.getSession()
+                    if (session) {
+                        this.currentUser = session.user
+                        this.isAuthenticated = true
+                        this.updateUIForAuthenticatedUser()
+                    }
+
+                    // 인증 상태 변경 감지
+                    supabase.auth.onAuthStateChange((event, session) => {
+                        console.log('🔄 Auth state changed:', event)
+                        if (session) {
+                            this.currentUser = session.user
+                            this.isAuthenticated = true
+                            this.updateUIForAuthenticatedUser()
+                        } else {
+                            this.currentUser = null
+                            this.isAuthenticated = false
+                            this.updateUIForUnauthenticatedUser()
+                        }
+                    })
+                } catch (error) {
+                    console.error('❌ Auth 초기화 실패:', error)
+                }
+            }
+
+            async handleSignIn() {
+                const email = document.getElementById('authEmail')?.value?.trim()
+                const password = document.getElementById('authPassword')?.value?.trim()
+
+                if (!email || !password) {
+                    showMessage('이메일과 비밀번호를 입력해주세요.', 'error')
+                    return
+                }
+
+                if (!supabase) {
+                    showMessage('시스템 초기화 오류입니다. 페이지를 새로고침 해주세요.', 'error')
+                    return
+                }
+
+                try {
+                    console.log('🔐 로그인 시도 중...', email)
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email,
+                        password
+                    })
+
+                    if (error) throw error
+
+                    showMessage('✅ 로그인에 성공했습니다!', 'success')
+                    
+                    // 입력 필드 초기화
+                    const emailInput = document.getElementById('authEmail')
+                    const passwordInput = document.getElementById('authPassword')
+                    if (emailInput) emailInput.value = ''
+                    if (passwordInput) passwordInput.value = ''
+                    
+                    console.log('✅ 로그인 성공:', data.user.email)
+                } catch (error) {
+                    console.error('❌ 로그인 실패:', error)
+                    showMessage(this.getErrorMessage(error), 'error')
+                }
+            }
+
+            async handleSignUp() {
+                const email = document.getElementById('authEmail')?.value?.trim()
+                const password = document.getElementById('authPassword')?.value?.trim()
+
+                if (!email || !password) {
+                    showMessage('이메일과 비밀번호를 입력해주세요.', 'error')
+                    return
+                }
+
+                if (password.length < 6) {
+                    showMessage('비밀번호는 최소 6자 이상이어야 합니다.', 'error')
+                    return
+                }
+
+                if (!supabase) {
+                    showMessage('시스템 초기화 오류입니다. 페이지를 새로고침 해주세요.', 'error')
+                    return
+                }
+
+                try {
+                    console.log('📝 회원가입 시도 중...', email)
+                    const { data, error } = await supabase.auth.signUp({
+                        email,
+                        password,
+                        options: {
+                            data: {
+                                source: '대치삼성정형외과_웹사이트',
+                                created_at: new Date().toISOString()
+                            }
+                        }
+                    })
+
+                    if (error) throw error
+
+                    showMessage('✅ 회원가입이 완료되었습니다!', 'success')
+                    
+                    // 입력 필드 초기화
+                    const emailInput = document.getElementById('authEmail')
+                    const passwordInput = document.getElementById('authPassword')
+                    if (emailInput) emailInput.value = ''
+                    if (passwordInput) passwordInput.value = ''
+                    
+                    console.log('✅ 회원가입 성공:', data.user?.email)
+                } catch (error) {
+                    console.error('❌ 회원가입 실패:', error)
+                    showMessage(this.getErrorMessage(error), 'error')
+                }
+            }
+
+            async handleResetPassword() {
+                const email = document.getElementById('authEmail')?.value?.trim()
+
+                if (!email) {
+                    showMessage('이메일을 입력해주세요.', 'error')
+                    return
+                }
+
+                if (!supabase) {
+                    showMessage('시스템 초기화 오류입니다.', 'error')
+                    return
+                }
+
+                try {
+                    const { error } = await supabase.auth.resetPasswordForEmail(email)
+
+                    if (error) throw error
+
+                    showMessage('📧 비밀번호 재설정 이메일이 전송되었습니다.', 'success')
+                } catch (error) {
+                    console.error('❌ 비밀번호 재설정 실패:', error)
+                    showMessage(this.getErrorMessage(error), 'error')
+                }
+            }
+
+            async signOut() {
+                if (!supabase) return
+
+                try {
+                    await supabase.auth.signOut()
+                    showMessage('👋 로그아웃되었습니다.', 'info')
+                    console.log('👋 로그아웃 완료')
+                } catch (error) {
+                    console.error('❌ 로그아웃 실패:', error)
+                    showMessage('로그아웃 중 오류가 발생했습니다.', 'error')
+                }
+            }
+
+            getErrorMessage(error) {
+                const errorMessages = {
+                    'Invalid login credentials': '이메일 또는 비밀번호가 올바르지 않습니다.',
+                    'User already registered': '이미 등록된 이메일입니다.',
+                    'Password should be at least 6 characters': '비밀번호는 최소 6자 이상이어야 합니다.',
+                    'Email not confirmed': '이메일 인증이 완료되지 않았습니다. 이메일을 확인해주세요.',
+                    'Invalid email': '유효하지 않은 이메일 형식입니다.',
+                    'Too many requests': '너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.',
+                    'Signup disabled': '현재 회원가입이 비활성화되어 있습니다.'
+                }
+                return errorMessages[error.message] || `오류: ${error.message}`
+            }
+
+            updateUIForAuthenticatedUser() {
+                console.log('🎉 UI 업데이트: 인증된 사용자')
+                const loginRequired = document.querySelector('.login-required')
+                if (loginRequired) {
+                    loginRequired.innerHTML = `
+                        <div style="text-align: center;">
+                            <h3>환영합니다! ${this.currentUser.email}님</h3>
+                            <p>실제 환자분들의 치료 전후 사진을 확인하실 수 있습니다.</p>
+                            <div style="margin-top: 20px;">
+                                <button onclick="authManager.signOut()" class="btn" style="background: #dc3545; color: white;">로그아웃</button>
+                            </div>
+                        </div>
+                    `
+                }
                 
-                // 5초 후 자동 숨김
-                setTimeout(() => {
-                    messageDiv.style.display = 'none';
-                }, 5000);
-            } else {
-                // fallback으로 alert 사용
-                alert(message);
+                // 실제 치료 사례 로드
+                this.loadTreatmentCases()
+            }
+
+            updateUIForUnauthenticatedUser() {
+                console.log('🔐 UI 업데이트: 미인증 사용자')
+                const loginRequired = document.querySelector('.login-required')
+                if (loginRequired) {
+                    loginRequired.innerHTML = `
+                        <h3>회원가입 후 확인 가능합니다</h3>
+                        <p>환자분들의 개인정보 보호를 위해 회원가입 후 열람 가능합니다.</p>
+                        <div class="login-form">
+                            <input type="email" id="authEmail" class="form-input" placeholder="이메일 주소" required>
+                            <input type="password" id="authPassword" class="form-input" placeholder="비밀번호 (최소 6자)" required>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="authManager.handleSignIn()" class="btn btn-primary" style="flex: 1;">로그인</button>
+                                <button onclick="authManager.handleSignUp()" class="btn" style="background: #28a745; color: white; flex: 1;">회원가입</button>
+                            </div>
+                            <button onclick="authManager.handleResetPassword()" style="background: none; border: none; color: #666; text-decoration: underline; margin-top: 10px; cursor: pointer;">비밀번호를 잊으셨나요?</button>
+                        </div>
+                        <div id="authMessage" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;"></div>
+                    `
+                }
+            }
+
+            async loadTreatmentCases() {
+                if (!supabase || !this.isAuthenticated) {
+                    console.log('⚠️ 치료 사례 로드 불가: 미인증 또는 Supabase 미초기화')
+                    return
+                }
+
+                try {
+                    console.log('📋 치료 사례 로드 중...')
+                    const { data, error } = await supabase
+                        .from('treatment_cases')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+
+                    if (error) {
+                        if (error.code === '42P01') {
+                            console.log('ℹ️ treatment_cases 테이블이 아직 생성되지 않음')
+                            this.showPlaceholderGallery('테이블 준비 중...')
+                            return
+                        }
+                        throw error
+                    }
+
+                    console.log('✅ 치료 사례 로드 성공:', data?.length || 0, '건')
+                    this.displayTreatmentCases(data || [])
+
+                } catch (error) {
+                    console.error('❌ 치료 사례 로드 실패:', error)
+                    this.showPlaceholderGallery('로드 실패')
+                }
+            }
+
+            displayTreatmentCases(cases) {
+                const gallery = document.getElementById('beforeAfterGallery')
+                if (!gallery) return
+
+                if (cases.length === 0) {
+                    this.showPlaceholderGallery('준비 중')
+                    return
+                }
+
+                gallery.innerHTML = cases.map(case_ => `
+                    <div class="before-after-card">
+                        <div class="image-comparison">
+                            <div class="comparison-image">
+                                <img src="${case_.before_image}" alt="치료 전" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentNode.innerHTML='<div style=\\"height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;\\">이미지 로드 실패</div>'">
+                                <div class="image-label before-label">BEFORE</div>
+                            </div>
+                            <div class="comparison-image">
+                                <img src="${case_.after_image}" alt="치료 후" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentNode.innerHTML='<div style=\\"height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;\\">이미지 로드 실패</div>'">
+                                <div class="image-label after-label">AFTER</div>
+                            </div>
+                        </div>
+                        <div class="case-content">
+                            <h4 class="case-title">${case_.title}</h4>
+                            <p class="case-description">${case_.description}</p>
+                            <p style="color: #999; font-size: 0.8rem; margin-top: 10px;">등록일: ${new Date(case_.created_at).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                `).join('')
+            }
+
+            showPlaceholderGallery(message = '준비 중') {
+                const gallery = document.getElementById('beforeAfterGallery')
+                if (gallery) {
+                    gallery.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 15px; grid-column: 1 / -1;">
+                            <h3 style="color: #1a237e; margin-bottom: 15px;">📸 치료 사례 ${message}</h3>
+                            <p style="color: #666;">곧 실제 환자분들의 치료 전후 사진을 확인하실 수 있습니다.</p>
+                        </div>
+                    `
+                }
             }
         }
+
+        // ===========================================
+        // 기본 UI 기능들
+        // ===========================================
 
         // 카운터 애니메이션
         function animateCounter() {
-            const counter = document.getElementById('patientCounter');
-            if (!counter) return;
+            const counter = document.getElementById('patientCounter')
+            if (!counter) return
             
-            const target = 49000;
-            let current = 0;
-            const increment = target / 100;
+            const target = 49000
+            let current = 0
+            const increment = target / 100
             const timer = setInterval(() => {
-                current += increment;
+                current += increment
                 if (current >= target) {
-                    counter.textContent = target.toLocaleString();
-                    clearInterval(timer);
+                    counter.textContent = target.toLocaleString()
+                    clearInterval(timer)
                 } else {
-                    counter.textContent = Math.floor(current).toLocaleString();
+                    counter.textContent = Math.floor(current).toLocaleString()
                 }
-            }, 20);
+            }, 20)
         }
 
         // 모바일 메뉴 토글
         function initMobileMenu() {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const navMenu = document.getElementById('navMenu');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn')
+            const navMenu = document.getElementById('navMenu')
 
-            if (!mobileMenuBtn || !navMenu) return;
+            if (!mobileMenuBtn || !navMenu) return
 
             mobileMenuBtn.addEventListener('click', function() {
-                navMenu.classList.toggle('active');
-                this.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
-            });
+                navMenu.classList.toggle('active')
+                this.textContent = navMenu.classList.contains('active') ? '✕' : '☰'
+            })
 
             // 네비게이션 메뉴 클릭시 모바일 메뉴 닫기
             document.querySelectorAll('.nav-item a').forEach(link => {
                 link.addEventListener('click', () => {
-                    navMenu.classList.remove('active');
-                    mobileMenuBtn.textContent = '☰';
-                });
-            });
+                    navMenu.classList.remove('active')
+                    mobileMenuBtn.textContent = '☰'
+                })
+            })
         }
 
         // 스크롤시 네비게이션 스타일 변경
         function initScrollNavbar() {
             window.addEventListener('scroll', function() {
-                const navbar = document.querySelector('.navbar');
+                const navbar = document.querySelector('.navbar')
                 if (navbar) {
                     if (window.scrollY > 50) {
-                        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-                        navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.15)';
+                        navbar.style.background = 'rgba(255, 255, 255, 0.98)'
+                        navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.15)'
                     } else {
-                        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-                        navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+                        navbar.style.background = 'rgba(255, 255, 255, 0.95)'
+                        navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)'
                     }
                 }
-            });
+            })
         }
 
         // 스크롤 애니메이션
         function initScrollAnimation() {
             function handleScroll() {
-                const elements = document.querySelectorAll('.solution-card, .trust-stat, .problem-group, .before-after-card');
+                const elements = document.querySelectorAll('.solution-card, .trust-stat, .problem-group, .before-after-card')
                 elements.forEach(element => {
-                    const elementTop = element.getBoundingClientRect().top;
-                    const elementVisible = 150;
+                    const elementTop = element.getBoundingClientRect().top
+                    const elementVisible = 150
                     
                     if (elementTop < window.innerHeight - elementVisible) {
-                        element.classList.add('fade-in');
+                        element.classList.add('fade-in')
                     }
-                });
+                })
             }
 
-            window.addEventListener('scroll', handleScroll);
-            handleScroll(); // 초기 실행
+            window.addEventListener('scroll', handleScroll)
+            handleScroll() // 초기 실행
         }
 
         // 부드러운 스크롤
         function initSmoothScroll() {
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.
-querySelector(this.getAttribute('href'));
+                    e.preventDefault()
+                    const target = document.querySelector(this.getAttribute('href'))
                     if (target) {
                         target.scrollIntoView({
                             behavior: 'smooth',
                             block: 'start'
-                        });
+                        })
                     }
-                });
-            });
+                })
+            })
         }
 
+        // ===========================================
+        // 전역 함수들 (HTML에서 호출용)
+        // ===========================================
+        
+        function handleSignUp() {
+            if (authManager) {
+                authManager.handleSignUp()
+            } else {
+                showMessage('시스템이 아직 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.', 'error')
+            }
+        }
+
+        function handleSignIn() {
+            if (authManager) {
+                authManager.handleSignIn()
+            } else {
+                showMessage('시스템이 아직 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.', 'error')
+            }
+        }
+
+        function handleResetPassword() {
+            if (authManager) {
+                authManager.handleResetPassword()
+            } else {
+                showMessage('시스템이 아직 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.', 'error')
+            }
+        }
+
+        function handleSignOut() {
+            if (authManager) {
+                authManager.signOut()
+            } else {
+                showMessage('로그아웃할 수 없습니다.', 'error')
+            }
+        }
+
+        // ===========================================
+        // 페이지 초기화
+        // ===========================================
+        
         // DOM 로드 완료 시 초기화
         document.addEventListener('DOMContentLoaded', async function() {
-            console.log('🚀 대치삼성정형외과 웹사이트 로드 시작');
+            console.log('🚀 대치삼성정형외과 웹사이트 로드 시작')
             
             // 기본 기능들 초기화
-            animateCounter();
-            initMobileMenu();
-            initScrollNavbar();
-            initScrollAnimation();
-            initSmoothScroll();
+            animateCounter()
+            initMobileMenu()
+            initScrollNavbar()
+            initScrollAnimation()
+            initSmoothScroll()
             
             // Supabase 초기화 시도
-            await initSupabase();
+            await initSupabase()
             
-            console.log('✅ 웹사이트 초기화 완료');
-        });
+            console.log('✅ 웹사이트 초기화 완료')
+        })
 
         // 페이지 로드 완료 시
         window.addEventListener('load', function() {
-            console.log('🎉 대치삼성정형외과 웹사이트 로드 완료');
-        });
+            console.log('🎉 대치삼성정형외과 웹사이트 로드 완료')
+        })
 
         // 전역 함수로 노출 (HTML onclick에서 사용)
-        window.handleSignUp = handleSignUp;
-        window.handleSignIn = handleSignIn;
-        window.handleResetPassword = handleResetPassword;
-        window.handleSignOut = handleSignOut;
+        window.handleSignUp = handleSignUp
+        window.handleSignIn = handleSignIn
+        window.handleResetPassword = handleResetPassword
+        window.handleSignOut = handleSignOut
+        window.authManager = authManager
+        window.supabase = supabase
+
+        // 디버깅용 함수
+        window.testAuth = function() {
+            console.log('🔍 인증 상태 테스트:')
+            console.log('- Supabase 초기화:', !!supabase)
+            console.log('- AuthManager:', !!authManager)
+            console.log('- 현재 사용자:', authManager?.currentUser?.email || '없음')
+            console.log('- 인증 상태:', authManager?.isAuthenticated || false)
+        }
+
+        // 전역 오류 처리
+        window.addEventListener('error', function(event) {
+            console.error('🚨 전역 오류:', event.error)
+        })
+
+        console.log('💡 콘솔에서 testAuth()를 실행하여 상태를 확인할 수 있습니다')
     </script>
 </body>
 </html>
