@@ -1071,8 +1071,25 @@
                     if (session) {
                         this.currentUser = session.user
                         this.isAuthenticated = true
-                        this.updateUIForAuthenticatedUser()
-                    }
+                        this.updateUIForAuthenticatedUser() {
+    console.log('🎉 UI 업데이트: 인증된 사용자')
+    const loginRequired = document.querySelector('.login-required')
+    if (loginRequired) {
+        loginRequired.innerHTML = `
+            <div style="text-align: center;">
+                <h3>환영합니다! ${this.currentUser.email}님</h3>
+                <p>실제 환자분들의 치료 전후 사진을 확인하실 수 있습니다.</p>
+                <div style="margin-top: 20px;">
+                    <button onclick="handleSignOut()" class="btn" style="background: #dc3545; color: white;">로그아웃</button>
+                    <a href="admin.html" class="btn" style="background: #1a237e; color: white; margin-left: 10px; text-decoration: none;">🛠️ 관리자 패널</a>
+                </div>
+            </div>
+        `
+    }
+    
+    // 실제 치료 사례 로드
+    this.loadTreatmentCases()
+}
 
                     // 인증 상태 변경 감지
                     supabase.auth.onAuthStateChange((event, session) => {
