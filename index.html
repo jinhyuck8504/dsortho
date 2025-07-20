@@ -963,7 +963,7 @@
     </footer>
 <script type="module">
         // ===========================================
-        // 대치삼성정형외과 웹사이트 JavaScript
+        // 대치삼성정형외과 웹사이트 JavaScript (수정완료버전)
         // ===========================================
         
         // Supabase 연동
@@ -1211,6 +1211,11 @@
                     await supabase.auth.signOut()
                     showMessage('👋 로그아웃되었습니다.', 'info')
                     console.log('👋 로그아웃 완료')
+                    
+                    // UI 초기화
+                    setTimeout(() => {
+                        location.reload() // 확실한 초기화를 위해 페이지 새로고침
+                    }, 1000)
                 } catch (error) {
                     console.error('❌ 로그아웃 실패:', error)
                     showMessage('로그아웃 중 오류가 발생했습니다.', 'error')
@@ -1239,7 +1244,7 @@
                             <h3>환영합니다! ${this.currentUser.email}님</h3>
                             <p>실제 환자분들의 치료 전후 사진을 확인하실 수 있습니다.</p>
                             <div style="margin-top: 20px;">
-                                <button onclick="authManager.signOut()" class="btn" style="background: #dc3545; color: white;">로그아웃</button>
+                                <button onclick="handleSignOut()" class="btn" style="background: #dc3545; color: white;">로그아웃</button>
                             </div>
                         </div>
                     `
@@ -1260,10 +1265,10 @@
                             <input type="email" id="authEmail" class="form-input" placeholder="이메일 주소" required>
                             <input type="password" id="authPassword" class="form-input" placeholder="비밀번호 (최소 6자)" required>
                             <div style="display: flex; gap: 10px;">
-                                <button onclick="authManager.handleSignIn()" class="btn btn-primary" style="flex: 1;">로그인</button>
-                                <button onclick="authManager.handleSignUp()" class="btn" style="background: #28a745; color: white; flex: 1;">회원가입</button>
+                                <button onclick="handleSignIn()" class="btn btn-primary" style="flex: 1;">로그인</button>
+                                <button onclick="handleSignUp()" class="btn" style="background: #28a745; color: white; flex: 1;">회원가입</button>
                             </div>
-                            <button onclick="authManager.handleResetPassword()" style="background: none; border: none; color: #666; text-decoration: underline; margin-top: 10px; cursor: pointer;">비밀번호를 잊으셨나요?</button>
+                            <button onclick="handleResetPassword()" style="background: none; border: none; color: #666; text-decoration: underline; margin-top: 10px; cursor: pointer;">비밀번호를 잊으셨나요?</button>
                         </div>
                         <div id="authMessage" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;"></div>
                     `
@@ -1284,9 +1289,10 @@
                         .order('created_at', { ascending: false })
 
                     if (error) {
-                        if (error.code === '42P01') {
-                            console.log('ℹ️ treatment_cases 테이블이 아직 생성되지 않음')
-                            this.showPlaceholderGallery('테이블 준비 중...')
+                        // 테이블이 없는 경우 (42P01) 또는 서버 오류 (500)
+                        if (error.code === '42P01' || error.message.includes('relation') || error.status === 500) {
+                            console.log('ℹ️ treatment_cases 테이블이 아직 생성되지 않음 또는 서버 오류')
+                            this.showPlaceholderGallery('데이터베이스 준비 중...')
                             return
                         }
                         throw error
@@ -1297,7 +1303,9 @@
 
                 } catch (error) {
                     console.error('❌ 치료 사례 로드 실패:', error)
-                    this.showPlaceholderGallery('로드 실패')
+                    // 500 오류나 기타 오류 시 사용자에게 친화적 메시지
+                    this.showPlaceholderGallery('준비 중')
+                    console.log('💡 Supabase에서 데이터베이스 테이블 생성이 필요할 수 있습니다.')
                 }
             }
 
@@ -1439,11 +1447,11 @@
         }
 
         // ===========================================
-        // 전역 함수들 (HTML에서 호출용)
+        // 전역 함수들 (HTML에서 호출용) - 수정완료
         // ===========================================
         
         function handleSignUp() {
-            if (authManager) {
+            if (authManager && typeof authManager.handleSignUp === 'function') {
                 authManager.handleSignUp()
             } else {
                 showMessage('시스템이 아직 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.', 'error')
@@ -1451,7 +1459,7 @@
         }
 
         function handleSignIn() {
-            if (authManager) {
+            if (authManager && typeof authManager.handleSignIn === 'function') {
                 authManager.handleSignIn()
             } else {
                 showMessage('시스템이 아직 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.', 'error')
@@ -1459,7 +1467,7 @@
         }
 
         function handleResetPassword() {
-            if (authManager) {
+            if (authManager && typeof authManager.handleResetPassword === 'function') {
                 authManager.handleResetPassword()
             } else {
                 showMessage('시스템이 아직 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.', 'error')
@@ -1467,10 +1475,21 @@
         }
 
         function handleSignOut() {
-            if (authManager) {
+            console.log('🔄 로그아웃 시도:', authManager)
+            if (authManager && typeof authManager.signOut === 'function') {
                 authManager.signOut()
+            } else if (supabase && supabase.auth) {
+                // authManager가 없으면 직접 Supabase 호출
+                supabase.auth.signOut().then(() => {
+                    showMessage('👋 로그아웃되었습니다.', 'info')
+                    setTimeout(() => location.reload(), 1000) // 페이지 새로고침으로 확실하게 처리
+                }).catch(error => {
+                    console.error('❌ 로그아웃 실패:', error)
+                    showMessage('로그아웃 중 오류가 발생했습니다.', 'error')
+                })
             } else {
-                showMessage('로그아웃할 수 없습니다.', 'error')
+                showMessage('로그아웃할 수 없습니다. 페이지를 새로고침 해주세요.', 'error')
+                setTimeout(() => location.reload(), 2000)
             }
         }
 
