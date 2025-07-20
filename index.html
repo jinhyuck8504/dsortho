@@ -1515,9 +1515,7 @@ async loadTreatmentCases() {
 
         console.log('💡 콘솔에서 testAuth()를 실행하여 상태를 확인할 수 있습니다')
 
-        // ===========================================
-        // 원장님 프로필 로드 함수 추가
-        // ===========================================
+        // 원장님 프로필 로드 함수
         async function loadDirectorProfile() {
             if (!supabase) return
             
@@ -1542,14 +1540,10 @@ async loadTreatmentCases() {
                         titleElement.textContent = profile.title
                     }
                     
-                    const messageElements = document.querySelectorAll('.director-message p')
-                    if (messageElements.length > 0 && profile.message) {
-                        const messages = profile.message.split('\n')
-                        messageElements.forEach((element, index) => {
-                            if (messages[index]) {
-                                element.textContent = messages[index]
-                            }
-                        })
+                    const messageContainer = document.querySelector('.director-message')
+                    if (messageContainer && profile.message) {
+                        const cleanMessage = profile.message.replace(/\n+/g, ' ').trim()
+                        messageContainer.innerHTML = `<p>${cleanMessage}</p>`
                     }
                     
                     const photoElement = document.querySelector('.director-photo')
