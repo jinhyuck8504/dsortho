@@ -1515,52 +1515,7 @@ async loadTreatmentCases() {
 
         console.log('💡 콘솔에서 testAuth()를 실행하여 상태를 확인할 수 있습니다')
 
-        // ===========================================
-        // 원장님 프로필 로드 함수 추가
-        // ===========================================
-        async function loadDirectorProfile() {
-            if (!supabase) return
-            
-            try {
-                const { data, error } = await supabase
-                    .from('director_profile')
-                    .select('*')
-                    .limit(1)
-                
-                if (error) throw error
-                
-                if (data && data.length > 0) {
-                    const profile = data[0]
-                    
-                    const nameElement = document.querySelector('.director-name')
-                    if (nameElement && profile.name) {
-                        nameElement.textContent = profile.name
-                    }
-                    
-                    const titleElement = document.querySelector('.director-title')
-                    if (titleElement && profile.title) {
-                        titleElement.textContent = profile.title
-                    }
-                    
-                    const messageElements = document.querySelectorAll('.director-message p')
-                    if (messageElements.length > 0 && profile.message) {
-                        const messages = profile.message.split('\n')
-                        messageElements.forEach((element, index) => {
-                            if (messages[index]) {
-                                element.textContent = messages[index]
-                            }
-                        })
-                    }
-                    
-                    const photoElement = document.querySelector('.director-photo')
-                    if (photoElement && profile.photo) {
-                        photoElement.innerHTML = `<img src="${profile.photo}" alt="원장님 사진" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
-                    }
-                }
-            } catch (error) {
-                console.error('프로필 로드 실패:', error)
-            }
-        }
+       
     </script>
 </body>
 </html>
