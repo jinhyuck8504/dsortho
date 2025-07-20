@@ -1071,24 +1071,26 @@
                     if (session) {
                         this.currentUser = session.user
                         this.isAuthenticated = true
-                        this.updateUIForAuthenticatedUser() {
-    console.log('🎉 UI 업데이트: 인증된 사용자')
-    const loginRequired = document.querySelector('.login-required')
-    if (loginRequired) {
-        loginRequired.innerHTML = `
-            <div style="text-align: center;">
-                <h3>환영합니다! ${this.currentUser.email}님</h3>
-                <p>실제 환자분들의 치료 전후 사진을 확인하실 수 있습니다.</p>
-                <div style="margin-top: 20px;">
-                    <button onclick="handleSignOut()" class="btn" style="background: #dc3545; color: white;">로그아웃</button>
-                    <a href="admin.html" class="btn" style="background: #1a237e; color: white; margin-left: 10px; text-decoration: none;">🛠️ 관리자 패널</a>
-                </div>
-            </div>
-        `
-    }
-    
-    // 실제 치료 사례 로드
-    this.loadTreatmentCases()
+                        this.updateUIForUnauthenticatedUser() {
+                console.log('🔐 UI 업데이트: 미인증 사용자')
+                const loginRequired = document.querySelector('.login-required')
+                if (loginRequired) {
+                    loginRequired.innerHTML = `
+                        <h3>회원가입 후 확인 가능합니다</h3>
+                        <p>환자분들의 개인정보 보호를 위해 회원가입 후 열람 가능합니다.</p>
+                        <div class="login-form">
+                            <input type="email" id="authEmail" class="form-input" placeholder="이메일 주소" required>
+                            <input type="password" id="authPassword" class="form-input" placeholder="비밀번호 (최소 6자)" required>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="handleSignIn()" class="btn btn-primary" style="flex: 1;">로그인</button>
+                                <button onclick="handleSignUp()" class="btn" style="background: #28a745; color: white; flex: 1;">회원가입</button>
+                            </div>
+                            <button onclick="handleResetPassword()" style="background: none; border: none; color: #666; text-decoration: underline; margin-top: 10px; cursor: pointer;">비밀번호를 잊으셨나요?</button>
+                        </div>
+                        <div id="authMessage" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;"></div>
+                    `
+                }
+            }
 }
 
                     // 인증 상태 변경 감지
