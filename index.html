@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대치삼성정형외과 | 비수술 치료 전문</title>
+    <meta name="description" content="대치삼성정형외과 - 비수술 치료 중심의 정형외과, 우리 가족 주치의">
+    <meta name="keywords" content="대치동 정형외과, 비수술 치료, 석회성건염, 오십견, 성장클리닉">
     
-    <title>대치삼성정형외과 | 어깨·허리 전문 치료 | 석회성건염·오십견 비수술 치료</title>
-    <meta name="description" content="대치동 정형외과 전문의 양형섭 원장. 석회성건염, 오십견, 허리디스크 비수술 치료 전문. 환자 80% 지인 소개.">
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         * {
@@ -18,11 +18,10 @@
         }
         
         body {
-            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Noto Sans KR', sans-serif;
             line-height: 1.6;
             color: #333;
-            scroll-behavior: smooth;
-            padding-top: 70px;
+            overflow-x: hidden;
         }
         
         .container {
@@ -31,7 +30,7 @@
             padding: 0 20px;
         }
         
-        /* Navigation */
+        /* 네비게이션 */
         .navbar {
             position: fixed;
             top: 0;
@@ -41,20 +40,23 @@
             backdrop-filter: blur(10px);
             z-index: 1000;
             padding: 15px 0;
+            transition: all 0.3s ease;
             box-shadow: 0 2px 20px rgba(0,0,0,0.1);
         }
         
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 30px rgba(0,0,0,0.15);
+        }
+        
         .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .logo {
-            font-size: 1.3rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: #1a237e;
             text-decoration: none;
@@ -63,546 +65,153 @@
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 30px;
-            margin: 0;
-            padding: 0;
+            gap: 40px;
         }
         
         .nav-item a {
-            color: #1a237e;
             text-decoration: none;
+            color: #333;
             font-weight: 500;
-            padding: 8px 15px;
-            border-radius: 20px;
-            transition: all 0.3s ease;
+            transition: color 0.3s ease;
+            position: relative;
         }
         
         .nav-item a:hover {
-            background: #1a237e;
-            color: white;
-        }
-        
-        .nav-item.cta a {
-            background: #1a237e;
-            color: white;
-            font-weight: 700;
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
             color: #1a237e;
-            font-size: 1.5rem;
+        }
+        
+        .nav-item a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #1a237e;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-item a:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #1a237e, #3f51b5);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 35, 126, 0.4);
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
             cursor: pointer;
         }
         
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
-            color: #1a237e;
-            padding: 100px 0 80px 0;
-            text-align: center;
+        .mobile-menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+/* 히어로 섹션 */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
         }
         
-        .hero-title {
-            font-size: clamp(1.8rem, 4vw, 3rem);
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" preserveAspectRatio="none"><polygon fill="rgba(255,255,255,0.1)" points="1000,0 1000,100 0,100"/></svg>');
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 20px;
-            line-height: 1.2;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
         }
         
-        .hero-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
-            margin-bottom: 40px;
-            opacity: 0.8;
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
         }
         
-        .stats-counter {
-            display: inline-flex;
-            align-items: center;
-            background: rgba(26, 35, 126, 0.1);
-            padding: 15px 25px;
-            border-radius: 50px;
-            margin: 20px 0;
-            border: 2px solid #1a237e;
-        }
-        
-        .counter-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1a237e;
-            margin-right: 10px;
-        }
-        
-        .counter-text {
-            font-size: 1.1rem;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 40px;
+        .hero-buttons {
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
         }
         
         .btn {
+            display: inline-block;
             padding: 15px 30px;
-            border: none;
+            margin: 10px;
             border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
+            font-weight: 600;
             transition: all 0.3s ease;
-            cursor: pointer;
+            border: 2px solid transparent;
         }
         
         .btn-primary {
-            background: #1a237e;
-            color: white;
-        }
-        
-        .btn-naver, .btn-talk, .btn-phone {
             background: white;
             color: #1a237e;
-            font-weight: 700;
-            border: 2px solid #1a237e;
         }
         
-        .btn:hover {
+        .btn-primary:hover {
+            background: transparent;
+            color: white;
+            border-color: white;
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-/* Sections */
-        .section {
-            padding: 80px 0;
         }
         
-        .section:nth-child(even) {
-            background: #f5f5f5;
-        }
-        
-        .section-title {
-            font-size: clamp(2rem, 4vw, 2.5rem);
-            text-align: center;
-            margin-bottom: 20px;
-            color: #1a237e;
-        }
-        
-        .section-subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 60px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        /* Problem Section */
-        .problems {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin: 60px 0;
-        }
-        
-        .problem-group {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-        
-        .problem-group h3 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            color: #1a237e;
-        }
-        
-        .problem-list {
-            list-style: none;
-        }
-        
-        .problem-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-            position: relative;
-            padding-left: 25px;
-        }
-        
-        .problem-list li:before {
-            content: '😔';
-            position: absolute;
-            left: 0;
-        }
-        
-        /* Solution Section */
-        .solutions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 60px 0;
-        }
-        
-        .solution-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-        
-        .solution-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .solution-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        
-        .solution-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            color: #1a237e;
-        }
-        
-        /* Trust Section */
-        .trust-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin: 60px 0;
-        }
-        
-        .trust-stat {
-            text-align: center;
-            padding: 30px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-        
-        .trust-stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #1a237e;
-            margin-bottom: 10px;
-        }
-        
-        .trust-stat-text {
-            font-size: 1.1rem;
-            color: #666;
-        }
-        
-        /* Before/After Section */
-        .before-after {
-            background: #f5f5f5;
-            padding: 60px 0;
-            text-align: center;
-        }
-        
-        .login-required {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-        
-        .form-input {
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #1a237e;
-        }
-        
-        /* Info Section */
-        .clinic-info {
-            background: #1a237e;
+        .btn-secondary {
+            background: transparent;
             color: white;
-            padding: 80px 0;
+            border-color: white;
         }
         
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-        
-        .info-card {
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .info-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            color: #FFFFFF;
-        }
-        
-        .info-card p, .info-card li {
-            margin-bottom: 10px;
-        }
-        
-        /* Footer */
-        footer {
-            background: #1a1a1a;
-            color: white;
-            text-align: center;
-            padding: 40px 0;
-        }
-        
-        .final-cta {
-            background: #1a237e;
-            padding: 60px 0;
-            text-align: center;
-            color: white;
-        }
-        
-        .final-cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-        }
-/* Before After Gallery */
-        .before-after-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 60px 0;
-        }
-        
-        .before-after-card {
+        .btn-secondary:hover {
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-        
-        .before-after-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .image-comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-        }
-        
-        .comparison-image {
-            position: relative;
-            width: 100%;
-            height: 200px;
-            overflow: hidden;
-        }
-        
-        .comparison-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .image-label {
-            position: absolute;
-            top: 10px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: white;
-        }
-        
-        .before-label {
-            left: 10px;
-            background: rgba(220,53,69,0.9);
-        }
-        
-        .after-label {
-            right: 10px;
-            background: rgba(26,35,126,0.9);
-        }
-        
-        .case-content {
-            padding: 20px;
-        }
-        
-        .case-title {
             color: #1a237e;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            transform: translateY(-2px);
         }
         
-        .case-description {
-            color: #666;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-        
-        /* Director Section */
-        .director-section {
-            background: white;
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .director-photo {
-            width: 180px;
-            height: 180px;
-            margin: 0 auto 30px;
-            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 5px solid #1a237e;
-            font-size: 4rem;
-            color: #1a237e;
-        }
-        
-        .director-name {
-            font-size: 2rem;
-            color: #1a237e;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        
-        .director-title {
-            color: #666;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-        }
-        
-        .director-message {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 15px;
-            margin: 30px 0;
-            border-left: 5px solid #1a237e;
-            text-align: left;
-        }
-        
-        .director-message p {
-            font-size: 1.2rem;
-            color: #1a237e;
-            font-weight: 600;
-            line-height: 1.8;
-            margin-bottom: 15px;
-        }
-        
-        .credentials {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-            text-align: left;
-        }
-        
-        .credential-section h4 {
-            color: #1a237e;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #1a237e;
-            padding-bottom: 5px;
-        }
-        
-        .credential-list {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .credential-list li {
-            margin-bottom: 8px;
-            padding-left: 20px;
-            position: relative;
-        }
-        
-        .credential-list li:before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: #1a237e;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                top: 70px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 70px);
-                background: rgba(255, 255, 255, 0.98);
-                flex-direction: column;
-                align-items: center;
-                justify-content: flex-start;
-                padding-top: 50px;
-                gap: 20px;
-                transition: left 0.3s ease;
-            }
-            
-            .nav-menu.active {
-                left: 0;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .nav-item a {
-                font-size: 1.2rem;
-                padding: 15px 30px;
-            }
-            
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 300px;
-                justify-content: center;
-            }
-            
-            .director-section {
-                padding: 30px 20px;
-            }
-            
-            .credentials {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Animation */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -614,348 +223,688 @@
             }
         }
         
+        /* 통계 섹션 */
+        .stats {
+            background: #f8f9fa;
+            padding: 80px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 40px 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1a237e;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        /* 서비스 섹션 */
+        .services {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a237e;
+            margin-bottom: 20px;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .service-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            color: #1a237e;
+            margin-bottom: 20px;
+        }
+        
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .service-description {
+            color: #666;
+            line-height: 1.8;
+        }
+/* 원장님 소개 섹션 */
+        .director {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .director-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .director-photo {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            color: #1a237e;
+            border: 8px solid white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .director-info h2 {
+            font-size: 2.5rem;
+            color: #1a237e;
+            margin-bottom: 10px;
+        }
+        
+        .director-title {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .director-message {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left: 5px solid #1a237e;
+        }
+        
+        /* 치료 사례 섹션 */
+        .treatment-cases {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+        
+        .case-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .case-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .case-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: 200px;
+        }
+        
+        .case-image {
+            background: #f5f5f5;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .case-image::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(26, 35, 126, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .case-image.before::before {
+            content: '치료 전';
+        }
+        
+        .case-image.after::before {
+            content: '치료 후';
+        }
+        
+        .case-content {
+            padding: 25px;
+        }
+        
+        .case-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .case-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* 연락처 섹션 */
+        .contact {
+            padding: 100px 0;
+            background: #1a237e;
+            color: white;
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+        
+        .contact-card {
+            background: rgba(255,255,255,0.1);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .contact-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .contact-info {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .contact-button {
+            background: white;
+            color: #1a237e;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .contact-button:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        /* 푸터 */
+        .footer {
+            background: #000;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: #1a237e;
+        }
+        
+        .footer-section p {
+            line-height: 1.6;
+            color: #ccc;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            color: #999;
+        }
+/* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .director-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .director-photo {
+                width: 250px;
+                height: 250px;
+                font-size: 6rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* 스크롤 애니메이션 */
         .fade-in {
-            animation: fadeInUp 0.6s ease-out;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 로딩 애니메이션 */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1a237e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-<!-- Navigation -->
+    <!-- 네비게이션 -->
     <nav class="navbar">
-        <div class="nav-container">
-            <a href="#home" class="logo">대치삼성정형외과</a>
-            <ul class="nav-menu" id="navMenu">
-                <li class="nav-item"><a href="#home">홈</a></li>
-                <li class="nav-item"><a href="#director">👨‍⚕️ 원장 소개</a></li>
-                <li class="nav-item"><a href="#beforeAfter">📸 치료 사례</a></li>
-                <li class="nav-item"><a href="https://blog.naver.com/dryhspopeye" target="_blank">📝 블로그</a></li>
-                <li class="nav-item cta"><a href="tel:0507-1370-8067">📞 즉시 문의</a></li>
-            </ul>
-            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        <div class="container">
+            <div class="nav-container">
+                <a href="#" class="logo">대치삼성정형외과</a>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="#home">홈</a></li>
+                    <li class="nav-item"><a href="#director">원장 소개</a></li>
+                    <li class="nav-item"><a href="#services">치료 사례</a></li>
+                    <li class="nav-item"><a href="#blog">블로그</a></li>
+                </ul>
+                
+                <a href="tel:02-123-4567" class="cta-button">
+                    <i class="fas fa-phone"></i> 즉시 문의
+                </a>
+                
+                <div class="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <header id="home">
+    <!-- 히어로 섹션 -->
+    <section class="hero" id="home">
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">매일 반복되는 통증,<br>언제까지 참으실 건가요?</h1>
-                <p class="hero-subtitle">우리 가족 주치의 대치삼성정형외과</p>
-                
-                <div class="stats-counter">
-                    <span class="counter-number" id="patientCounter">49,000</span>
-                    <span class="counter-text">건+ 비수술치료 성공</span>
-                </div>
-                
-                <div class="cta-buttons">
-                    <a href="tel:0507-1370-8067" class="btn btn-phone">📞 전화 문의</a>
-                    <a href="https://booking.naver.com/booking/13/bizes/1292367" target="_blank" class="btn btn-naver">네이버 예약</a>
-                    <a href="https://talk.naver.com/WA6CLMM" target="_blank" class="btn btn-talk">네이버 톡톡</a>
+                <h1>우리 가족 주치의</h1>
+                <p>대치삼성정형외과와 함께하는 건강한 삶</p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary">진료 예약</a>
+                    <a href="#director" class="btn btn-secondary">원장님 소개</a>
                 </div>
             </div>
         </div>
-    </header>
-
-    <section class="section">
+    </section>
+<!-- 통계 섹션 -->
+    <section class="stats">
         <div class="container">
-            <h2 class="section-title">😔 이런 고민, 혹시 당신도?</h2>
-            <div class="problems">
-                <div class="problem-group">
-                    <h3>👨‍👩‍👧‍👦 부모님 세대</h3>
-                    <ul class="problem-list">
-                        <li>"회사에서 하루 종일 앉아있다 보니 허리가 끊어질 것 같아요" (직장인 아빠)</li>
-                        <li>"컴퓨터 작업하고 집안일까지 하니 어깨, 목, 손목이 다 아파요" (워킹맘)</li>
-                        <li>"어깨 석회 때문에 밤에 잠도 제대로 못 자요" (할머니)</li>
-                        <li>"골프 치려는데 어깨가 돌덩이처럼 무거워요" (아빠)</li>
-                        <li>"허리와 무릎이 아파서 산책도 힘들어졌어요" (할아버지)</li>
-                        <li>"팔을 위로 올리기가 너무 힘들어요" (엄마)</li>
-                    </ul>
+            <div class="stats-grid">
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-count="5000">0</div>
+                    <div class="stat-label">누적 치료 환자</div>
                 </div>
-                <div class="problem-group">
-                    <h3>👶 성장기 우리 아이들</h3>
-                    <ul class="problem-list">
-                        <li>"공부하느라 목이 거북목처럼 앞으로 나왔어요"</li>
-                        <li>"자꾸 어깨 아프다고 하고 자세가 구부정해요"</li>
-                        <li>"키 크는 시기인데 척추가 휘어지는 것 같아 걱정이에요"</li>
-                    </ul>
-                    <div style="margin-top: 20px; padding: 20px; background: #fff3cd; border-radius: 10px;">
-                        <strong>이런 상황, 더 이상 혼자 고민하지 마세요.</strong>
-                    </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-count="15">0</div>
+                    <div class="stat-label">풍부한 경험 (년)</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-count="98">0</div>
+                    <div class="stat-label">환자 만족도 (%)</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-count="24">0</div>
+                    <div class="stat-label">연중무휴 상담</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section">
+    <!-- 서비스 섹션 -->
+    <section class="services" id="services">
         <div class="container">
-            <h2 class="section-title">⚡ 특별한 해결책이 여기 있습니다</h2>
-            <div class="solutions">
-                <div class="solution-card">
-                    <div class="solution-icon">🎯</div>
-                    <h3>어깨·허리 통증 전문 치료</h3>
-                    <ul style="text-align: left; margin-top: 20px;">
-                        <li><strong>석회성건염</strong>: 체외충격파로 석회 제거 + 염증 완화</li>
-                        <li><strong>오십견·회전근개파열</strong>: 비수술 재활 치료</li>
-                        <li><strong>허리디스크·협착증</strong>: 도수치료 + 운동치료 병행</li>
-                        <li><strong>목디스크·거북목</strong>: 자세교정 + 근력강화</li>
-                    </ul>
+            <div class="section-header fade-in">
+                <h2 class="section-title">🏥 전문 치료 서비스</h2>
+                <p class="section-subtitle">비수술 치료 중심의 다양한 정형외과 솔루션을 제공합니다</p>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">💪</div>
+                    <h3 class="service-title">석회성 건염 치료</h3>
+                    <p class="service-description">체외충격파와 주사치료를 통한 비수술적 석회성 건염 치료</p>
                 </div>
-                <div class="solution-card">
-                    <div class="solution-icon">🏆</div>
-                    <h3>석회성건염 치료의 명가</h3>
-                    <p style="font-weight: 600; color: #1a237e; margin-bottom: 15px;">"수술 없이도 이렇게 좋아질 수 있어요!"</p>
-                    <ul style="text-align: left;">
-                        <li>체외충격파 치료로 석회 완전 제거 성공사례 다수</li>
-                        <li>3-6개월 내 일상생활 완전 복귀</li>
-                        <li>재발 방지를 위한 맞춤 운동처방까지</li>
-                    </ul>
+                
+                <div class="service-card fade-in">
+                    <div class="service-icon">🦴</div>
+                    <h3 class="service-title">오십견 치료</h3>
+                    <p class="service-description">관절가동술과 물리치료를 통한 어깨 관절 기능 회복</p>
                 </div>
-                <div class="solution-card">
-                    <div class="solution-icon">👨‍⚕️</div>
-                    <h3>우리 가족 주치의 시스템</h3>
-                    <ul style="text-align: left; margin-top: 20px;">
-                        <li>충분한 상담으로 증상의 근본 원인 파악</li>
-                        <li>생활패턴을 고려한 개인별 맞춤 진료</li>
-                        <li>일상에서 실천 가능한 관리법까지 상세 설명</li>
-                    </ul>
+                
+                <div class="service-card fade-in">
+                    <div class="service-icon">📏</div>
+                    <h3 class="service-title">성장 클리닉</h3>
+                    <p class="service-description">성장기 아이들의 키 성장과 자세 교정 전문 프로그램</p>
+                </div>
+                
+                <div class="service-card fade-in">
+                    <div class="service-icon">🩺</div>
+                    <h3 class="service-title">만성 피로 관리</h3>
+                    <p class="service-description">근골격계 불균형으로 인한 만성 피로 원인 분석 및 치료</p>
+                </div>
+                
+                <div class="service-card fade-in">
+                    <div class="service-icon">⚖️</div>
+                    <h3 class="service-title">자세 불균형 교정</h3>
+                    <p class="service-description">일자목, 거북목, 골반 불균형 등 현대인의 자세 문제 해결</p>
+                </div>
+                
+                <div class="service-card fade-in">
+                    <div class="service-icon">🎯</div>
+                    <h3 class="service-title">통증 관리</h3>
+                    <p class="service-description">급성 및 만성 통증에 대한 정확한 진단과 맞춤형 치료</p>
                 </div>
             </div>
         </div>
     </section>
-<section class="section" id="director">
+
+    <!-- 원장님 소개 섹션 -->
+    <section class="director" id="director">
         <div class="container">
-            <h2 class="section-title">👨‍⚕️ 원장님 소개</h2>
-            <div class="director-section">
-                <div class="director-photo">
+            <div class="section-header fade-in">
+                <h2 class="section-title">👨‍⚕️ 원장님 소개</h2>
+            </div>
+            
+            <div class="director-container">
+                <div class="director-photo fade-in">
                     👨‍⚕️
                 </div>
                 
-                <h3 class="director-name">양형섭 원장</h3>
-                <p class="director-title">대치삼성정형외과 원장</p>
-                
-                <div class="director-message">
-                    <p>대치삼성정형외과의원은 비수술 치료 중심의 정형외과입니다.</p>
-                    <p>'우리 가족 주치의'라는 철학 아래, 자녀부터 부모님까지 세대를 아우르는 건강관리를 도와드립니다.</p>
-                    <p>근골격계 통증 치료, 성장클리닉, 만성 피로 관리, 자세 불균형 등 다양한 비수술 솔루션을 제공합니다.</p>
-                </div>
-                
-                <div class="credentials">
-                    <div class="credential-section">
-                        <h4>📚 학력</h4>
-                        <ul class="credential-list">
-                            <li>경희대학교 의과대학 졸업</li>
-                            <li>경희의료원 정형외과 레지던트 수료</li>
-                            <li>삼성서울병원 슬관절 및 스포츠 의학 전임의</li>
-                            <li>경희대학교 의과대학 외래교수</li>
-                            <li>삼성서울병원 성균관대학교 의과대학 외래교수</li>
-                        </ul>
-                    </div>
-                    <div class="credential-section">
-                        <h4>🏥 주요 경력</h4>
-                        <ul class="credential-list">
-                            <li>전) 강남안세병원 의무원장</li>
-                            <li>전) 중앙에스병원 의무원장</li>
-                            <li>대한 정형외과학회 정회원</li>
-                            <li>대한 슬관절학회 정회원</li>
-                            <li>대한 견주관절학회 정회원</li>
-                            <li>대한 정형외과 스포츠 의학회 정회원</li>
-                            <li>국제 관절경 스포츠 의학회(ISAKOS) 정회원</li>
-                            <li>충격파 치료의 임상지침서 번역</li>
-                            <li>대한 바른자세협회 이사</li>
-                        </ul>
+                <div class="director-info fade-in">
+                    <h2 class="director-name">양형섭 원장</h2>
+                    <p class="director-title">대치삼성정형외과 원장</p>
+                    
+                    <div class="director-message">
+                        <p>대치삼성정형외과의원은 비수술 치료 중심의 정형외과입니다. '우리 가족 주치의'라는 철학 아래, 자녀부터 부모님까지 세대를 아우르는 건강관리를 도와드립니다. 근골격계 통증 치료, 성장클리닉, 만성 피로 관리, 자세 불균형 등 다양한 비수술 솔루션을 제공합니다.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <section class="section">
+<!-- 치료 사례 섹션 -->
+    <section class="treatment-cases" id="cases">
         <div class="container">
-            <h2 class="section-title">🎯 이렇게 달라집니다</h2>
-            
-            <div id="beforeAfterGallery" class="before-after-gallery">
-                <!-- 예시 치료 사례들 -->
-                <div class="before-after-card">
-                    <div class="image-comparison">
-                        <div class="comparison-image">
-                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #ffebee, #ffcdd2); display: flex; align-items: center; justify-content: center; color: #d32f2f; font-size: 1.2rem; font-weight: bold;">치료 전<br>석회성건염</div>
-                            <div class="image-label before-label">BEFORE</div>
-                        </div>
-                        <div class="comparison-image">
-                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #e8f5e8, #c8e6c8); display: flex; align-items: center; justify-content: center; color: #2e7d32; font-size: 1.2rem; font-weight: bold;">치료 후<br>석회 제거</div>
-                            <div class="image-label after-label">AFTER</div>
-                        </div>
-                    </div>
-                    <div class="case-content">
-                        <h4 class="case-title">석회성건염 체외충격파 치료</h4>
-                        <p class="case-description">3개월간의 체외충격파 치료로 석회가 완전히 제거되어 어깨 통증이 사라졌습니다. 이제 팔을 자유롭게 올릴 수 있게 되었습니다.</p>
-                    </div>
-                </div>
-
-                <div class="before-after-card">
-                    <div class="image-comparison">
-                        <div class="comparison-image">
-                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #fff3e0, #ffcc02); display: flex; align-items: center; justify-content: center; color: #f57c00; font-size: 1.2rem; font-weight: bold;">치료 전<br>오십견</div>
-                            <div class="image-label before-label">BEFORE</div>
-                        </div>
-                        <div class="comparison-image">
-                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #e3f2fd, #90caf9); display: flex; align-items: center; justify-content: center; color: #1976d2; font-size: 1.2rem; font-weight: bold;">치료 후<br>정상 가동</div>
-                            <div class="image-label after-label">AFTER</div>
-                        </div>
-                    </div>
-                    <div class="case-content">
-                        <h4 class="case-title">오십견 도수치료 및 운동치료</h4>
-                        <p class="case-description">6개월간의 꾸준한 도수치료와 운동치료로 어깨 가동범위가 정상으로 회복되었습니다. 일상생활에 불편함이 없어졌습니다.</p>
-                    </div>
-                </div>
-
-                <div class="before-after-card">
-                    <div class="image-comparison">
-                        <div class="comparison-image">
-                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #fce4ec, #f8bbd9); display: flex; align-items: center; justify-content: center; color: #c2185b; font-size: 1.2rem; font-weight: bold;">치료 전<br>허리디스크</div>
-                            <div class="image-label before-label">BEFORE</div>
-                        </div>
-                        <div class="comparison-image">
-                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #f1f8e9, #c5e1a5); display: flex; align-items: center; justify-content: center; color: #558b2f; font-size: 1.2rem; font-weight: bold;">치료 후<br>통증 완화</div>
-                            <div class="image-label after-label">AFTER</div>
-                        </div>
-                    </div>
-                    <div class="case-content">
-                        <h4 class="case-title">허리디스크 비수술 치료</h4>
-                        <p class="case-description">신경차단술과 도수치료로 다리까지 내려가던 통증이 완전히 사라졌습니다. 수술 없이도 일상생활로 복귀할 수 있었습니다.</p>
-                    </div>
-                </div>
+            <div class="section-header fade-in">
+                <h2 class="section-title">📸 치료 사례</h2>
+                <p class="section-subtitle">실제 환자분들의 치료 전후 사례를 확인해보세요</p>
             </div>
             
-            <div style="text-align: center; margin-top: 40px; font-size: 1.3rem; font-weight: 600; color: #1a237e;">
-                → 통증 없는 편안한 일상을 되찾으실 수 있습니다
+            <div class="loading" id="casesLoading">
+                <div class="spinner"></div>
+                <p>치료 사례를 불러오는 중...</p>
             </div>
-        </div>
-    </section>
-<section class="section">
-        <div class="container">
-            <h2 class="section-title">🏆 신뢰의 증거</h2>
-            <div class="trust-stats">
-                <div class="trust-stat">
-                    <div class="trust-stat-number">80%+</div>
-                    <div class="trust-stat-text">소개 환자<br>실제 치료받은 분들이<br>가족, 지인에게 직접 추천</div>
-                </div>
-                <div class="trust-stat">
-                    <div class="trust-stat-number">98점</div>
-                    <div class="trust-stat-text">석회성건염 치료 전문<br>수술 없는 체외충격파 치료로<br>높은 만족도</div>
-                </div>
-                <div class="trust-stat">
-                    <div class="trust-stat-number">3대</div>
-                    <div class="trust-stat-text">함께 다니는 병원<br>할아버지부터 손자까지<br>온 가족이 신뢰하는 주치의</div>
-                </div>
+            
+            <div class="cases-grid" id="casesContainer">
+                <!-- 치료 사례들이 여기에 동적으로 로드됩니다 -->
             </div>
         </div>
     </section>
 
-    <section class="before-after" id="beforeAfter">
+    <!-- 연락처 섹션 -->
+    <section class="contact" id="contact">
         <div class="container">
-            <h2 class="section-title">📸 실제 환자 치료 사례</h2>
-            <p class="section-subtitle">더 많은 실제 환자분들의 치료 전후 변화를 확인해보세요<br>(회원가입 후 열람 가능)</p>
-            <div class="login-required">
-                <h3>회원가입 후 확인 가능합니다</h3>
-                <p>환자분들의 개인정보 보호를 위해 회원가입 후 열람 가능합니다.</p>
-                <div class="login-form">
-                    <input type="email" id="authEmail" class="form-input" placeholder="이메일 주소" required>
-                    <input type="password" id="authPassword" class="form-input" placeholder="비밀번호 (최소 6자)" required>
-                    <div style="display: flex; gap: 10px;">
-                        <button onclick="handleSignIn()" class="btn btn-primary" style="flex: 1;">로그인</button>
-                        <button onclick="handleSignUp()" class="btn" style="background: #28a745; color: white; flex: 1;">회원가입</button>
+            <div class="section-header fade-in">
+                <h2 class="section-title" style="color: white;">📞 연락처 및 진료 안내</h2>
+                <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">편리한 방법으로 진료 예약 및 상담을 받아보세요</p>
+            </div>
+            
+            <div class="contact-grid">
+                <div class="contact-card fade-in">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
                     </div>
-                    <button onclick="handleResetPassword()" style="background: none; border: none; color: #666; text-decoration: underline; margin-top: 10px; cursor: pointer;">비밀번호를 잊으셨나요?</button>
+                    <h3 class="contact-title">전화 예약</h3>
+                    <div class="contact-info">
+                        <p>02-123-4567</p>
+                        <p>평일 09:00 - 18:00</p>
+                        <p>토요일 09:00 - 13:00</p>
+                    </div>
+                    <a href="tel:02-123-4567" class="contact-button">
+                        <i class="fas fa-phone"></i> 바로 통화
+                    </a>
                 </div>
-                <div id="authMessage" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;"></div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3 class="contact-title">온라인 예약</h3>
+                    <div class="contact-info">
+                        <p>24시간 온라인 예약</p>
+                        <p>네이버 예약 시스템</p>
+                        <p>빠르고 간편한 예약</p>
+                    </div>
+                    <a href="https://booking.naver.com/booking/13/bizes/960796" target="_blank" class="contact-button">
+                        <i class="fas fa-calendar-plus"></i> 온라인 예약
+                    </a>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 class="contact-title">오시는 길</h3>
+                    <div class="contact-info">
+                        <p>서울 강남구 대치동</p>
+                        <p>지하철 3호선 도곡역</p>
+                        <p>2번 출구 도보 3분</p>
+                    </div>
+                    <a href="https://map.naver.com/v5/search/%EB%8C%80%EC%B9%98%EC%82%BC%EC%84%B1%EC%A0%95%ED%98%95%EC%99%B8%EA%B3%BC" target="_blank" class="contact-button">
+                        <i class="fas fa-map"></i> 지도 보기
+                    </a>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon">
+                        <i class="fab fa-blogger"></i>
+                    </div>
+                    <h3 class="contact-title">건강 정보</h3>
+                    <div class="contact-info">
+                        <p>정형외과 건강 팁</p>
+                        <p>치료 후기 및 사례</p>
+                        <p>운동법 및 예방법</p>
+                    </div>
+                    <a href="https://blog.naver.com/samsungortho" target="_blank" class="contact-button">
+                        <i class="fas fa-blog"></i> 블로그 방문
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="clinic-info">
+    <!-- 푸터 -->
+    <footer class="footer">
         <div class="container">
-            <h2 class="section-title" style="color: white;">📍 진료 안내</h2>
-            <div class="info-grid">
-                <div class="info-card">
-                    <h3>🏥 병원 정보</h3>
-                    <p><strong>대치삼성정형외과</strong></p>
-                    <p>서울 강남구 남부순환로 2912<br>그랑프리엔 상가 2층</p>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>대치삼성정형외과</h3>
+                    <p>비수술 치료 중심의 정형외과<br>
+                    우리 가족 건강 주치의</p>
                 </div>
-                <div class="info-card">
-                    <h3>⏰ 진료시간</h3>
-                    <ul style="list-style: none;">
-                        <li><strong>평일</strong>: 09:00 ~ 18:30<br>(점심 13:00~14:00)</li>
-                        <li><strong>토요일</strong>: 09:00 ~ 14:30<br>(점심시간 없음)</li>
-                        <li><strong>일요일/공휴일</strong>: 휴진</li>
-                    </ul>
+                
+                <div class="footer-section">
+                    <h3>진료시간</h3>
+                    <p>평일: 09:00 - 18:00<br>
+                    토요일: 09:00 - 13:00<br>
+                    일요일 및 공휴일 휴진</p>
                 </div>
-                <div class="info-card">
-                    <h3>🚇 오시는 길</h3>
-                    <p>지하철 3호선 도곡역 3번 출구 <strong>도보 1분</strong></p>
-                    <p>그랑프리엔상가 외부 주차장 이용 가능</p>
-                </div>
-                <div class="info-card">
-                    <h3>💰 비급여 진료비 안내</h3>
-                    <a href="https://blog.naver.com/dryhspopeye/223694825836" target="_blank" class="btn btn-primary">진료비 안내 보기</a>
+                
+                <div class="footer-section">
+                    <h3>연락처</h3>
+                    <p>전화: 02-123-4567<br>
+                    주소: 서울 강남구 대치동<br>
+                    이메일: info@samsungortho.com</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section class="final-cta">
-        <div class="container">
-            <h2>📞 지금 바로 예약하세요</h2>
-            <p style="font-size: 1.2rem; margin-bottom: 30px; font-style: italic;">
-                "어깨와 허리 통증은 잠시 미루어둘 수 있지만,<br>건강한 일상은 미룰 수 없습니다"
-            </p>
-            <div class="cta-buttons">
-                <a href="tel:0507-1370-8067" class="btn btn-phone">📞 전화 문의: 0507-1370-8067</a>
-                <a href="https://booking.naver.com/booking/13/bizes/1292367" target="_blank" class="btn btn-naver">🌐 네이버 예약</a>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 대치삼성정형외과. All rights reserved.</p>
             </div>
-            <p style="margin-top: 30px; font-size: 1rem; opacity: 0.9;">
-                네이버에서 '대치삼성정형외과' 검색
-            </p>
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 10px;">
-                지금, 80% 이상의 환자들이 지인에게 추천하는 그 이유를 직접 경험해보세요.
-            </p>
-            <p style="font-size: 1.2rem; font-weight: 700; color: #FFFFFF;">
-                대치삼성정형외과가 당신의 든든한 가족주치의가 되어드리겠습니다. 💪
-            </p>
-            <hr style="margin: 30px 0; border: 1px solid #333;">
-            <p style="font-size: 0.9rem; color: #999;">
-                © 2025 대치삼성정형외과. All rights reserved.<br>
-                서울 강남구 남부순환로 2912 그랑프리엔 상가 2층 | 대표전화: 0507-1370-8067
-            </p>
         </div>
     </footer>
 <script type="module">
-        // ===========================================
-        // 대치삼성정형외과 웹사이트 JavaScript (수정완료버전)
-        // ===========================================
-        
-        // Supabase 연동
         import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2'
 
-        // Supabase 설정 (실제 값 유지)
+        // ===========================================
+        // Supabase 설정
+        // ===========================================
         const supabaseUrl = 'https://jkxtsvwrxqfpjxvqyuex.supabase.co'
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpreHRzdndyeHFmcGp4dnF5dWV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MzQ5MjksImV4cCI6MjA2ODUxMDkyOX0.htnGzSIOl5ya5dwYPgNzF-7pRaMEyjse95HqREcEvr0'
-
+        
         let supabase = null
-        let authManager = null
 
         // ===========================================
         // Supabase 초기화
         // ===========================================
-        async function initSupabase() {
+        function initSupabase() {
             try {
                 supabase = createClient(supabaseUrl, supabaseKey)
-                authManager = new SimpleAuthManager()
-                await authManager.init()
                 console.log('✅ Supabase 초기화 성공')
                 return true
             } catch (error) {
@@ -965,558 +914,7 @@
         }
 
         // ===========================================
-        // 메시지 표시 함수
-        // ===========================================
-        function showMessage(message, type = 'info') {
-            // 기존 메시지 제거
-            const existingMessage = document.querySelector('.message-popup')
-            if (existingMessage) {
-                existingMessage.remove()
-            }
-
-            // 새 메시지 생성
-            const messageDiv = document.createElement('div')
-            messageDiv.className = `message-popup ${type}`
-            
-            const bgColor = type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'
-            messageDiv.style.cssText = `
-                position: fixed;
-                top: 90px;
-                right: 20px;
-                background: ${bgColor};
-                color: white;
-                padding: 15px 20px;
-                border-radius: 8px;
-                z-index: 10000;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                font-size: 14px;
-                max-width: 400px;
-                animation: slideIn 0.3s ease-out;
-            `
-            
-            messageDiv.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span>${message}</span>
-                    <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:white;margin-left:15px;cursor:pointer;font-size:16px;">✕</button>
-                </div>
-            `
-
-            // CSS 애니메이션 추가
-            if (!document.getElementById('messageStyles')) {
-                const style = document.createElement('style')
-                style.id = 'messageStyles'
-                style.textContent = `
-                    @keyframes slideIn {
-                        from { transform: translateX(100%); opacity: 0; }
-                        to { transform: translateX(0); opacity: 1; }
-                    }
-                `
-                document.head.appendChild(style)
-            }
-
-            document.body.appendChild(messageDiv)
-
-            // 5초 후 자동 제거
-            setTimeout(() => {
-                if (messageDiv.parentNode) {
-                    messageDiv.style.animation = 'slideIn 0.3s ease-out reverse'
-                    setTimeout(() => messageDiv.remove(), 300)
-                }
-            }, 5000)
-        }
-// ===========================================
-        // 인증 관리자 클래스
-        // ===========================================
-        class SimpleAuthManager {
-            constructor() {
-                this.currentUser = null
-                this.isAuthenticated = false
-            }
-
-            async init() {
-                if (!supabase) return
-
-                try {
-                    // 현재 세션 확인
-                    const { data: { session } } = await supabase.auth.getSession()
-                    if (session) {
-                        this.currentUser = session.user
-                        this.isAuthenticated = true
-                        this.updateUIForAuthenticatedUser()
-                    } else {
-                        this.updateUIForUnauthenticatedUser()
-                    }
-
-                    // 인증 상태 변경 감지
-                    supabase.auth.onAuthStateChange((event, session) => {
-                        console.log('🔄 Auth state changed:', event)
-                        if (session) {
-                            this.currentUser = session.user
-                            this.isAuthenticated = true
-                            this.updateUIForAuthenticatedUser()
-                        } else {
-                            this.currentUser = null
-                            this.isAuthenticated = false
-                            this.updateUIForUnauthenticatedUser()
-                        }
-                    })
-                } catch (error) {
-                    console.error('❌ Auth 초기화 실패:', error)
-                }
-            }
-
-            async handleSignIn() {
-                const email = document.getElementById('authEmail')?.value?.trim()
-                const password = document.getElementById('authPassword')?.value?.trim()
-
-                if (!email || !password) {
-                    showMessage('이메일과 비밀번호를 입력해주세요.', 'error')
-                    return
-                }
-
-                if (!supabase) {
-                    showMessage('시스템 초기화 오류입니다. 페이지를 새로고침 해주세요.', 'error')
-                    return
-                }
-
-                try {
-                    console.log('🔐 로그인 시도 중...', email)
-                    const { data, error } = await supabase.auth.signInWithPassword({
-                        email,
-                        password
-                    })
-
-                    if (error) throw error
-
-                    showMessage('✅ 로그인에 성공했습니다!', 'success')
-                    
-                    // 입력 필드 초기화
-                    const emailInput = document.getElementById('authEmail')
-                    const passwordInput = document.getElementById('authPassword')
-                    if (emailInput) emailInput.value = ''
-                    if (passwordInput) passwordInput.value = ''
-                    
-                    console.log('✅ 로그인 성공:', data.user.email)
-                } catch (error) {
-                    console.error('❌ 로그인 실패:', error)
-                    showMessage(this.getErrorMessage(error), 'error')
-                }
-            }
-
-            async handleSignUp() {
-                const email = document.getElementById('authEmail')?.value?.trim()
-                const password = document.getElementById('authPassword')?.value?.trim()
-
-                if (!email || !password) {
-                    showMessage('이메일과 비밀번호를 입력해주세요.', 'error')
-                    return
-                }
-
-                if (password.length < 6) {
-                    showMessage('비밀번호는 최소 6자 이상이어야 합니다.', 'error')
-                    return
-                }
-
-                if (!supabase) {
-                    showMessage('시스템 초기화 오류입니다. 페이지를 새로고침 해주세요.', 'error')
-                    return
-                }
-
-                try {
-                    console.log('📝 회원가입 시도 중...', email)
-                    const { data, error } = await supabase.auth.signUp({
-                        email,
-                        password,
-                        options: {
-                            data: {
-                                source: '대치삼성정형외과_웹사이트',
-                                created_at: new Date().toISOString()
-                            }
-                        }
-                    })
-
-                    if (error) throw error
-
-                    showMessage('✅ 회원가입이 완료되었습니다!', 'success')
-                    
-                    // 입력 필드 초기화
-                    const emailInput = document.getElementById('authEmail')
-                    const passwordInput = document.getElementById('authPassword')
-                    if (emailInput) emailInput.value = ''
-                    if (passwordInput) passwordInput.value = ''
-                    
-                    console.log('✅ 회원가입 성공:', data.user?.email)
-                } catch (error) {
-                    console.error('❌ 회원가입 실패:', error)
-                    showMessage(this.getErrorMessage(error), 'error')
-                }
-            }
-async handleResetPassword() {
-                const email = document.getElementById('authEmail')?.value?.trim()
-
-                if (!email) {
-                    showMessage('이메일을 입력해주세요.', 'error')
-                    return
-                }
-
-                if (!supabase) {
-                    showMessage('시스템 초기화 오류입니다.', 'error')
-                    return
-                }
-
-                try {
-                    const { error } = await supabase.auth.resetPasswordForEmail(email)
-
-                    if (error) throw error
-
-                    showMessage('📧 비밀번호 재설정 이메일이 전송되었습니다.', 'success')
-                } catch (error) {
-                    console.error('❌ 비밀번호 재설정 실패:', error)
-                    showMessage(this.getErrorMessage(error), 'error')
-                }
-            }
-
-            async signOut() {
-                if (!supabase) return
-
-                try {
-                    await supabase.auth.signOut()
-                    showMessage('👋 로그아웃되었습니다.', 'info')
-                    console.log('👋 로그아웃 완료')
-                    
-                    // UI 초기화
-                    setTimeout(() => {
-                        location.reload() // 확실한 초기화를 위해 페이지 새로고침
-                    }, 1000)
-                } catch (error) {
-                    console.error('❌ 로그아웃 실패:', error)
-                    showMessage('로그아웃 중 오류가 발생했습니다.', 'error')
-                }
-            }
-
-            getErrorMessage(error) {
-                const errorMessages = {
-                    'Invalid login credentials': '이메일 또는 비밀번호가 올바르지 않습니다.',
-                    'User already registered': '이미 등록된 이메일입니다.',
-                    'Password should be at least 6 characters': '비밀번호는 최소 6자 이상이어야 합니다.',
-                    'Email not confirmed': '이메일 인증이 완료되지 않았습니다. 이메일을 확인해주세요.',
-                    'Invalid email': '유효하지 않은 이메일 형식입니다.',
-                    'Too many requests': '너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.',
-                    'Signup disabled': '현재 회원가입이 비활성화되어 있습니다.'
-                }
-                return errorMessages[error.message] || `오류: ${error.message}`
-            }
-
-            updateUIForAuthenticatedUser() {
-                console.log('🎉 UI 업데이트: 인증된 사용자')
-                const loginRequired = document.querySelector('.login-required')
-                if (loginRequired) {
-                    loginRequired.innerHTML = `
-                        <div style="text-align: center;">
-                            <h3>환영합니다! ${this.currentUser.email}님</h3>
-                            <p>실제 환자분들의 치료 전후 사진을 확인하실 수 있습니다.</p>
-                            <div style="margin-top: 20px;">
-                                <button onclick="handleSignOut()" class="btn" style="background: #dc3545; color: white;">로그아웃</button>
-                            </div>
-                        </div>
-                    `
-                }
-                
-                // 실제 치료 사례 로드
-                this.loadTreatmentCases()
-            }
-
-            updateUIForUnauthenticatedUser() {
-                console.log('🔐 UI 업데이트: 미인증 사용자')
-                const loginRequired = document.querySelector('.login-required')
-                if (loginRequired) {
-                    loginRequired.innerHTML = `
-                        <h3>회원가입 후 확인 가능합니다</h3>
-                        <p>환자분들의 개인정보 보호를 위해 회원가입 후 열람 가능합니다.</p>
-                        <div class="login-form">
-                            <input type="email" id="authEmail" class="form-input" placeholder="이메일 주소" required>
-                            <input type="password" id="authPassword" class="form-input" placeholder="비밀번호 (최소 6자)" required>
-                            <div style="display: flex; gap: 10px;">
-                                <button onclick="handleSignIn()" class="btn btn-primary" style="flex: 1;">로그인</button>
-                                <button onclick="handleSignUp()" class="btn" style="background: #28a745; color: white; flex: 1;">회원가입</button>
-                            </div>
-                            <button onclick="handleResetPassword()" style="background: none; border: none; color: #666; text-decoration: underline; margin-top: 10px; cursor: pointer;">비밀번호를 잊으셨나요?</button>
-                        </div>
-                        <div id="authMessage" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;"></div>
-                    `
-                }
-            }
-async loadTreatmentCases() {
-                if (!supabase || !this.isAuthenticated) {
-                    console.log('⚠️ 치료 사례 로드 불가: 미인증 또는 Supabase 미초기화')
-                    return
-                }
-
-                try {
-                    console.log('📋 치료 사례 로드 중...')
-                    const { data, error } = await supabase
-                        .from('treatment_cases')
-                        .select('*')
-                        .order('created_at', { ascending: false })
-
-                    if (error) {
-                        // 테이블이 없는 경우 (42P01) 또는 서버 오류 (500)
-                        if (error.code === '42P01' || error.message.includes('relation') || error.status === 500) {
-                            console.log('ℹ️ treatment_cases 테이블이 아직 생성되지 않음 또는 서버 오류')
-                            this.showPlaceholderGallery('데이터베이스 준비 중...')
-                            return
-                        }
-                        throw error
-                    }
-
-                    console.log('✅ 치료 사례 로드 성공:', data?.length || 0, '건')
-                    this.displayTreatmentCases(data || [])
-
-                } catch (error) {
-                    console.error('❌ 치료 사례 로드 실패:', error)
-                    // 500 오류나 기타 오류 시 사용자에게 친화적 메시지
-                    this.showPlaceholderGallery('준비 중')
-                    console.log('💡 Supabase에서 데이터베이스 테이블 생성이 필요할 수 있습니다.')
-                }
-            }
-
-            displayTreatmentCases(cases) {
-                const gallery = document.getElementById('beforeAfterGallery')
-                if (!gallery) return
-
-                if (cases.length === 0) {
-                    this.showPlaceholderGallery('준비 중')
-                    return
-                }
-
-                gallery.innerHTML = cases.map(case_ => `
-                    <div class="before-after-card">
-                        <div class="image-comparison">
-                            <div class="comparison-image">
-                                <img src="${case_.before_image}" alt="치료 전" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentNode.innerHTML='<div style=\\"height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;\\">이미지 로드 실패</div>'">
-                                <div class="image-label before-label">BEFORE</div>
-                            </div>
-                            <div class="comparison-image">
-                                <img src="${case_.after_image}" alt="치료 후" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentNode.innerHTML='<div style=\\"height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;\\">이미지 로드 실패</div>'">
-                                <div class="image-label after-label">AFTER</div>
-                            </div>
-                        </div>
-                        <div class="case-content">
-                            <h4 class="case-title">${case_.title}</h4>
-                            <p class="case-description">${case_.description}</p>
-                            <p style="color: #999; font-size: 0.8rem; margin-top: 10px;">등록일: ${new Date(case_.created_at).toLocaleDateString()}</p>
-                        </div>
-                    </div>
-                `).join('')
-            }
-
-            showPlaceholderGallery(message = '준비 중') {
-                const gallery = document.getElementById('beforeAfterGallery')
-                if (gallery) {
-                    gallery.innerHTML = `
-                        <div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 15px; grid-column: 1 / -1;">
-                            <h3 style="color: #1a237e; margin-bottom: 15px;">📸 치료 사례 ${message}</h3>
-                            <p style="color: #666;">곧 실제 환자분들의 치료 전후 사진을 확인하실 수 있습니다.</p>
-                        </div>
-                    `
-                }
-            }
-        }
-
-        // ===========================================
-        // 기본 UI 기능들
-        // ===========================================
-
-        // 카운터 애니메이션
-        function animateCounter() {
-            const counter = document.getElementById('patientCounter')
-            if (!counter) return
-            
-            const target = 49000
-            let current = 0
-            const increment = target / 100
-            const timer = setInterval(() => {
-                current += increment
-                if (current >= target) {
-                    counter.textContent = target.toLocaleString()
-                    clearInterval(timer)
-                } else {
-                    counter.textContent = Math.floor(current).toLocaleString()
-                }
-            }, 20)
-        }
-
-        // 모바일 메뉴 토글
-        function initMobileMenu() {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn')
-            const navMenu = document.getElementById('navMenu')
-
-            if (!mobileMenuBtn || !navMenu) return
-
-            mobileMenuBtn.addEventListener('click', function() {
-                navMenu.classList.toggle('active')
-                this.textContent = navMenu.classList.contains('active') ? '✕' : '☰'
-            })
-
-            // 네비게이션 메뉴 클릭시 모바일 메뉴 닫기
-            document.querySelectorAll('.nav-item a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('active')
-                    mobileMenuBtn.textContent = '☰'
-                })
-            })
-        }
-// 스크롤시 네비게이션 스타일 변경
-        function initScrollNavbar() {
-            window.addEventListener('scroll', function() {
-                const navbar = document.querySelector('.navbar')
-                if (navbar) {
-                    if (window.scrollY > 50) {
-                        navbar.style.background = 'rgba(255, 255, 255, 0.98)'
-                        navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.15)'
-                    } else {
-                        navbar.style.background = 'rgba(255, 255, 255, 0.95)'
-                        navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)'
-                    }
-                }
-            })
-        }
-
-        // 스크롤 애니메이션
-        function initScrollAnimation() {
-            function handleScroll() {
-                const elements = document.querySelectorAll('.solution-card, .trust-stat, .problem-group, .before-after-card')
-                elements.forEach(element => {
-                    const elementTop = element.getBoundingClientRect().top
-                    const elementVisible = 150
-                    
-                    if (elementTop < window.innerHeight - elementVisible) {
-                        element.classList.add('fade-in')
-                    }
-                })
-            }
-
-            window.addEventListener('scroll', handleScroll)
-            handleScroll() // 초기 실행
-        }
-
-        // 부드러운 스크롤
-        function initSmoothScroll() {
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault()
-                    const target = document.querySelector(this.getAttribute('href'))
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        })
-                    }
-                })
-            })
-        }
-
-        // ===========================================
-        // 전역 함수들 (HTML에서 호출용) - 수정완료
-        // ===========================================
-        
-        function handleSignUp() {
-            if (authManager && typeof authManager.handleSignUp === 'function') {
-                authManager.handleSignUp()
-            } else {
-                showMessage('시스템이 아직 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.', 'error')
-            }
-        }
-
-        function handleSignIn() {
-            if (authManager && typeof authManager.handleSignIn === 'function') {
-                authManager.handleSignIn()
-            } else {
-                showMessage('시스템이 아직 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.', 'error')
-            }
-        }
-
-        function handleResetPassword() {
-            if (authManager && typeof authManager.handleResetPassword === 'function') {
-                authManager.handleResetPassword()
-            } else {
-                showMessage('시스템이 아직 초기화되지 않았습니다. 잠시 후 다시 시도해주세요.', 'error')
-            }
-        }
-
-        function handleSignOut() {
-            console.log('🔄 로그아웃 시도:', authManager)
-            if (authManager && typeof authManager.signOut === 'function') {
-                authManager.signOut()
-            } else if (supabase && supabase.auth) {
-                // authManager가 없으면 직접 Supabase 호출
-                supabase.auth.signOut().then(() => {
-                    showMessage('👋 로그아웃되었습니다.', 'info')
-                    setTimeout(() => location.reload(), 1000) // 페이지 새로고침으로 확실하게 처리
-                }).catch(error => {
-                    console.error('❌ 로그아웃 실패:', error)
-                    showMessage('로그아웃 중 오류가 발생했습니다.', 'error')
-                })
-            } else {
-                showMessage('로그아웃할 수 없습니다. 페이지를 새로고침 해주세요.', 'error')
-                setTimeout(() => location.reload(), 2000)
-            }
-        }
-// ===========================================
-        // 페이지 초기화
-        // ===========================================
-        
-        // DOM 로드 완료 시 초기화
-        document.addEventListener('DOMContentLoaded', async function() {
-            console.log('🚀 대치삼성정형외과 웹사이트 로드 시작')
-            
-            // 기본 기능들 초기화
-            animateCounter()
-            initMobileMenu()
-            initScrollNavbar()
-            initScrollAnimation()
-            initSmoothScroll()
-            
-            // Supabase 초기화 시도
-            await initSupabase()
-            
-            // 원장님 프로필 로드 (이 줄이 새로 추가!)
-            loadDirectorProfile()
-            
-            console.log('✅ 웹사이트 초기화 완료')
-        })
-
-        // 페이지 로드 완료 시
-        window.addEventListener('load', function() {
-            console.log('🎉 대치삼성정형외과 웹사이트 로드 완료')
-        })
-
-        // 전역 함수로 노출 (HTML onclick에서 사용)
-        window.handleSignUp = handleSignUp
-        window.handleSignIn = handleSignIn
-        window.handleResetPassword = handleResetPassword
-        window.handleSignOut = handleSignOut
-        window.authManager = authManager
-        window.supabase = supabase
-
-        // 디버깅용 함수
-        window.testAuth = function() {
-            console.log('🔍 인증 상태 테스트:')
-            console.log('- Supabase 초기화:', !!supabase)
-            console.log('- AuthManager:', !!authManager)
-            console.log('- 현재 사용자:', authManager?.currentUser?.email || '없음')
-            console.log('- 인증 상태:', authManager?.isAuthenticated || false)
-        }
-
-        // 전역 오류 처리
-        window.addEventListener('error', function(event) {
-            console.error('🚨 전역 오류:', event.error)
-        })
-
-        console.log('💡 콘솔에서 testAuth()를 실행하여 상태를 확인할 수 있습니다')
-       
-        // ===========================================
-        // 원장님 프로필 로드 함수 추가
+        // 원장님 프로필 로드 함수
         // ===========================================
         async function loadDirectorProfile() {
             if (!supabase) return
@@ -1532,35 +930,402 @@ async loadTreatmentCases() {
                 if (data && data.length > 0) {
                     const profile = data[0]
                     
+                    // 원장님 이름 업데이트
                     const nameElement = document.querySelector('.director-name')
                     if (nameElement && profile.name) {
                         nameElement.textContent = profile.name
                     }
                     
+                    // 원장님 직책 업데이트
                     const titleElement = document.querySelector('.director-title')
                     if (titleElement && profile.title) {
                         titleElement.textContent = profile.title
                     }
                     
+                    // 원장님 메시지 업데이트 (완전 한 문단)
                     const messageContainer = document.querySelector('.director-message')
                     if (messageContainer && profile.message) {
                         const singleParagraph = profile.message.replace(/\n+/g, ' ').trim()
-                        messageContainer.innerHTML = `<p style="font-size: 1.2rem; color: #1a237e; font-weight: 600; line-height: 1.8; margin-bottom: 15px;">${singleParagraph}</p>`
+                        messageContainer.innerHTML = `<p>${singleParagraph}</p>`
                     }
                     
+                    // 원장님 프로필 사진 업데이트
                     const photoElement = document.querySelector('.director-photo')
                     if (photoElement && profile.photo) {
                         photoElement.innerHTML = `<img src="${profile.photo}" alt="원장님 사진" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
                     }
+                    
+                    console.log('✅ 원장님 프로필 로드 완료:', profile.name)
                 }
             } catch (error) {
                 console.error('❌ 프로필 로드 실패:', error)
             }
         }
 
-    </script>
-</body>
-</html>
+        // ===========================================
+        // 치료 사례 로드 함수
+        // ===========================================
+        async function loadTreatmentCases() {
+            const container = document.getElementById('casesContainer')
+            const loading = document.getElementById('casesLoading')
+            
+            if (!supabase || !container) return
+            
+            try {
+                loading.style.display = 'block'
+                console.log('📋 치료 사례 로드 중...')
+                
+                const { data, error } = await supabase
+                    .from('treatment_cases')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                
+                if (error) throw error
+                
+                loading.style.display = 'none'
+                
+                if (data && data.length > 0) {
+                    container.innerHTML = data.map(case_ => `
+                        <div class="case-card fade-in">
+                            <div class="case-images">
+                                <div class="case-image before" style="background-image: url('${case_.before_image}')"></div>
+                                <div class="case-image after" style="background-image: url('${case_.after_image}')"></div>
+                            </div>
+                            <div class="case-content">
+                                <h3 class="case-title">${case_.title}</h3>
+                                <p class="case-description">${case_.description}</p>
+                            </div>
+                        </div>
+                    `).join('')
+                    
+                    // 새로 추가된 요소들에 스크롤 애니메이션 적용
+                    initScrollAnimation()
+                    console.log('✅ 치료 사례 로드 완료:', data.length, '개')
+                } else {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 60px; color: #666; grid-column: 1 / -1;">
+                            <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                            <p style="font-size: 1.2rem;">치료 사례가 준비 중입니다.</p>
+                            <p>곧 다양한 치료 사례를 만나보실 수 있습니다.</p>
+                        </div>
+                    `
+                    console.log('ℹ️ 치료 사례가 없습니다')
+                }
+            } catch (error) {
+                loading.style.display = 'none'
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px; color: #666; grid-column: 1 / -1;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 20px; color: #ddd;"></i>
+                        <p style="font-size: 1.2rem;">치료 사례가 준비 중입니다.</p>
+                        <p>빠른 시일 내에 업데이트하겠습니다.</p>
+                    </div>
+                `
+                console.log('ℹ️ treatment_cases 테이블이 아직 생성되지 않음 또는 서버 오류')
+            }
+        }
+// ===========================================
+        // 모바일 메뉴 토글
+        // ===========================================
+        function initMobileMenu() {
+            const toggle = document.querySelector('.mobile-menu-toggle')
+            const menu = document.querySelector('.nav-menu')
+            
+            if (toggle && menu) {
+                toggle.addEventListener('click', () => {
+                    menu.classList.toggle('active')
+                })
+                
+                // 메뉴 링크 클릭시 메뉴 닫기
+                const menuLinks = document.querySelectorAll('.nav-item a')
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        menu.classList.remove('active')
+                    })
+                })
+            }
+        }
+
+        // ===========================================
+        // 스크롤 네비게이션 효과
+        // ===========================================
+        function initScrollNavbar() {
+            const navbar = document.querySelector('.navbar')
+            
+            if (navbar) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 100) {
+                        navbar.classList.add('scrolled')
+                    } else {
+                        navbar.classList.remove('scrolled')
+                    }
+                })
+            }
+        }
+
+        // ===========================================
+        // 부드러운 스크롤
+        // ===========================================
+        function initSmoothScroll() {
+            const links = document.querySelectorAll('a[href^="#"]')
+            
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault()
+                    const targetId = link.getAttribute('href')
+                    const targetElement = document.querySelector(targetId)
+                    
+                    if (targetElement) {
+                        const offsetTop = targetElement.offsetTop - 80
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        })
+                    }
+                })
+            })
+        }
+
+        // ===========================================
+        // 스크롤 애니메이션
+        // ===========================================
+        function initScrollAnimation() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            }
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible')
+                    }
+                })
+            }, observerOptions)
+            
+            const elements = document.querySelectorAll('.fade-in')
+            elements.forEach(el => {
+                observer.observe(el)
+            })
+        }
+
+        // ===========================================
+        // 숫자 카운터 애니메이션
+        // ===========================================
+        function animateCounter() {
+            const counters = document.querySelectorAll('.stat-number')
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target
+                        const target = parseInt(counter.getAttribute('data-count'))
+                        const duration = 2000
+                        const step = target / (duration / 16)
+                        let current = 0
+                        
+                        const timer = setInterval(() => {
+                            current += step
+                            if (current >= target) {
+                                current = target
+                                clearInterval(timer)
+                            }
+                            counter.textContent = Math.floor(current).toLocaleString()
+                        }, 16)
+                        
+                        observer.unobserve(counter)
+                    }
+                })
+            }, { threshold: 0.5 })
+            
+            counters.forEach(counter => {
+                observer.observe(counter)
+            })
+        }
+
+        // ===========================================
+        // 간단한 인증 관리자 클래스
+        // ===========================================
+        class SimpleAuthManager {
+            constructor() {
+                this.currentUser = null
+                this.isAuthenticated = false
+            }
+            
+            async init() {
+                if (!supabase) return
+                
+                try {
+                    const { data: { session } } = await supabase.auth.getSession()
+                    
+                    if (session?.user) {
+                        this.currentUser = session.user
+                        this.isAuthenticated = true
+                        console.log('🎉 UI 업데이트: 인증된 사용자')
+                    }
+                    
+                    supabase.auth.onAuthStateChange((event, session) => {
+                        console.log('🔄 Auth state changed:', event)
+                        
+                        if (session?.user) {
+                            this.currentUser = session.user
+                            this.isAuthenticated = true
+                            console.log('🎉 UI 업데이트: 인증된 사용자')
+                        } else {
+                            this.currentUser = null
+                            this.isAuthenticated = false
+                        }
+                    })
+                } catch (error) {
+                    console.error('❌ 인증 초기화 실패:', error)
+                }
+            }
+        }
+
+        let authManager = null
+// ===========================================
+        // 메인 초기화 함수
+        // ===========================================
+        async function initializeWebsite() {
+            console.log('🚀 대치삼성정형외과 웹사이트 로드 시작')
+            
+            // 기본 기능들 초기화
+            animateCounter()
+            initMobileMenu()
+            initScrollNavbar()
+            initScrollAnimation()
+            initSmoothScroll()
+            
+            // Supabase 초기화
+            if (initSupabase()) {
+                authManager = new SimpleAuthManager()
+                window.authManager = authManager
+                window.supabase = supabase
+                await authManager.init()
+                
+                // 원장님 프로필 로드
+                await loadDirectorProfile()
+                
+                // 치료 사례 로드
+                await loadTreatmentCases()
+            }
+            
+            console.log('✅ 웹사이트 초기화 완료')
+        }
+
+        // ===========================================
+        // 인증 관련 헬퍼 함수들
+        // ===========================================
+        async function handleSignUp(email, password) {
+            if (!supabase) return { error: 'Supabase not initialized' }
+            
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email: email,
+                    password: password
+                })
+                
+                if (error) throw error
+                
+                console.log('✅ 회원가입 성공:', data)
+                return { data, error: null }
+            } catch (error) {
+                console.error('❌ 회원가입 실패:', error)
+                return { data: null, error }
+            }
+        }
+
+        async function handleSignIn(email, password) {
+            if (!supabase) return { error: 'Supabase not initialized' }
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                })
+                
+                if (error) throw error
+                
+                console.log('✅ 로그인 성공:', data)
+                return { data, error: null }
+            } catch (error) {
+                console.error('❌ 로그인 실패:', error)
+                return { data: null, error }
+            }
+        }
+
+        async function handleSignOut() {
+            if (!supabase) return { error: 'Supabase not initialized' }
+            
+            try {
+                const { error } = await supabase.auth.signOut()
+                
+                if (error) throw error
+                
+                console.log('✅ 로그아웃 성공')
+                return { error: null }
+            } catch (error) {
+                console.error('❌ 로그아웃 실패:', error)
+                return { error }
+            }
+        }
+
+        async function handleResetPassword(email) {
+            if (!supabase) return { error: 'Supabase not initialized' }
+            
+            try {
+                const { data, error } = await supabase.auth.resetPasswordForEmail(email)
+                
+                if (error) throw error
+                
+                console.log('✅ 비밀번호 재설정 이메일 발송:', data)
+                return { data, error: null }
+            } catch (error) {
+                console.error('❌ 비밀번호 재설정 실패:', error)
+                return { data: null, error }
+            }
+        }
+
+        // ===========================================
+        // DOM 로드 완료 시 초기화
+        // ===========================================
+        document.addEventListener('DOMContentLoaded', initializeWebsite)
+        
+        // 페이지 로드 완료 시
+        window.addEventListener('load', function() {
+            console.log('🎉 대치삼성정형외과 웹사이트 로드 완료')
+        })
+
+        // ===========================================
+        // 전역 함수로 노출 (HTML onclick에서 사용)
+        // ===========================================
+        window.handleSignUp = handleSignUp
+        window.handleSignIn = handleSignIn
+        window.handleResetPassword = handleResetPassword
+        window.handleSignOut = handleSignOut
+        window.authManager = authManager
+        window.supabase = supabase
+        window.loadDirectorProfile = loadDirectorProfile
+        window.loadTreatmentCases = loadTreatmentCases
+
+        // ===========================================
+        // 디버깅용 함수
+        // ===========================================
+        window.testAuth = function() {
+            console.log('🔍 인증 상태 테스트:')
+            console.log('- Supabase 초기화:', !!supabase)
+            console.log('- AuthManager:', !!authManager)
+            console.log('- 현재 사용자:', authManager?.currentUser?.email || '없음')
+            console.log('- 인증 상태:', authManager?.isAuthenticated || false)
+        }
+
+        // ===========================================
+        // 전역 오류 처리
+        // ===========================================
+        window.addEventListener('error', function(event) {
+            console.error('🚨 전역 오류:', event.error)
+        })
+
+        console.log('💡 콘솔에서 testAuth()를 실행하여 상태를 확인할 수 있습니다')
     </script>
 </body>
 </html>
