@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dsortho.co.kr/sitemap.xml
+# Sitemap
+Sitemap: https://dsortho.netlify.app/sitemap.xml
+
+# Disallow admin pages
+Disallow: /admin.html
+
+# Allow medical content
+Allow: /#director
+Allow: /#beforeAfter
