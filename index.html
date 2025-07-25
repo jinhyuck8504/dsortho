@@ -208,7 +208,8 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-/* Sections */
+
+        /* Sections */
         .section {
             padding: 80px 0;
         }
@@ -418,54 +419,56 @@
             font-size: 2.5rem;
             margin-bottom: 30px;
         }
-/* Before After Gallery - 개선된 버전 */
-.before-after-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 25px;
-    margin: 60px 0;
-    justify-items: center;
-}
 
-.before-after-card {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    width: 100%;
-    max-width: 500px;
-}
-
-.before-after-card:hover {
-    transform: translateY(-5px);
-}
-
-.image-comparison {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    width: 100%;
-}
-
-.comparison-image {
-    position: relative;
-    width: 100%;
-    height: 280px;
-    overflow: hidden;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.comparison-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
-    background: #000;
-}
+        /* Before After Gallery - 완전히 수정된 버전 */
+        .before-after-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+            justify-items: center;
+        }
+        
+        .before-after-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            width: 100%;
+            max-width: 550px;
+        }
+        
+        .before-after-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .image-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            width: 100%;
+            height: 300px;
+        }
+        
+        .comparison-image {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .comparison-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            background: #000;
+        }
         
         .image-label {
             position: absolute;
@@ -475,6 +478,7 @@
             font-size: 0.8rem;
             font-weight: 600;
             color: white;
+            z-index: 10;
         }
         
         .before-label {
@@ -642,6 +646,15 @@
             .credentials {
                 grid-template-columns: 1fr;
             }
+            
+            .before-after-gallery {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .image-comparison {
+                height: 250px;
+            }
         }
         
         /* 비급여 진료 안내 버튼 스타일 */
@@ -665,6 +678,7 @@
             box-shadow: 0 6px 20px rgba(52, 73, 94, 0.4);
             color: white;
         }
+
         /* Animation */
         @keyframes fadeInUp {
             from {
@@ -784,7 +798,8 @@
             </div>
         </div>
     </section>
-<section class="section" id="director">
+
+    <section class="section" id="director">
         <div class="container">
             <h2 class="section-title">👨‍⚕️ 원장님 소개</h2>
             <div class="director-section">
@@ -894,7 +909,8 @@
             </div>
         </div>
     </section>
-<section class="section">
+
+    <section class="section">
         <div class="container">
             <h2 class="section-title">🏆 신뢰의 증거</h2>
             <div class="trust-stats">
@@ -936,35 +952,35 @@
     </section>
 
     <section class="clinic-info">
-    <div class="container">
-        <h2 class="section-title" style="color: white;">📍 진료 안내</h2>
-        <div class="info-grid">
-            <div class="info-card">
-                <h3>🏥 병원 정보</h3>
-                <p><strong>대치삼성정형외과</strong></p>
-                <p>서울 강남구 남부순환로 2912<br>그랑프리엔 상가 2층</p>
-                <div style="margin-top: 15px;">
-                    <a href="https://blog.naver.com/dryhspopeye/223694825836" target="_blank" class="btn btn-secondary" style="display: inline-block; padding: 8px 16px; background: #34495e; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">
-                        💰 비급여 진료 안내
-                    </a>
+        <div class="container">
+            <h2 class="section-title" style="color: white;">📍 진료 안내</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>🏥 병원 정보</h3>
+                    <p><strong>대치삼성정형외과</strong></p>
+                    <p>서울 강남구 남부순환로 2912<br>그랑프리엔 상가 2층</p>
+                    <div style="margin-top: 15px;">
+                        <a href="https://blog.naver.com/dryhspopeye/223694825836" target="_blank" class="btn btn-secondary" style="display: inline-block; padding: 8px 16px; background: #34495e; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem;">
+                            💰 비급여 진료 안내
+                        </a>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h3>⏰ 진료시간</h3>
+                    <ul style="list-style: none;">
+                        <li><strong>평일</strong>: 09:00 ~ 18:30<br>(점심 13:00~14:00)</li>
+                        <li><strong>토요일</strong>: 09:00 ~ 14:30<br>(점심시간 없음)</li>
+                        <li><strong>일요일/공휴일</strong>: 휴진</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>🚇 오시는 길</h3>
+                    <p>지하철 3호선 도곡역 3번 출구 <strong>도보 1분</strong></p>
+                    <p>그랑프리엔상가 외부 주차장 이용 가능</p>
                 </div>
             </div>
-            <div class="info-card">
-                <h3>⏰ 진료시간</h3>
-                <ul style="list-style: none;">
-                    <li><strong>평일</strong>: 09:00 ~ 18:30<br>(점심 13:00~14:00)</li>
-                    <li><strong>토요일</strong>: 09:00 ~ 14:30<br>(점심시간 없음)</li>
-                    <li><strong>일요일/공휴일</strong>: 휴진</li>
-                </ul>
-            </div>
-            <div class="info-card">
-                <h3>🚇 오시는 길</h3>
-                <p>지하철 3호선 도곡역 3번 출구 <strong>도보 1분</strong></p>
-                <p>그랑프리엔상가 외부 주차장 이용 가능</p>
-            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <section class="final-cta">
         <div class="container">
@@ -997,7 +1013,8 @@
             </p>
         </div>
     </footer>
-<script type="module">
+
+    <script type="module">
         // ===========================================
         // 대치삼성정형외과 웹사이트 JavaScript (수정완료버전)
         // ===========================================
@@ -1088,7 +1105,8 @@
                 }
             }, 5000)
         }
-// ===========================================
+
+        // ===========================================
         // 인증 관리자 클래스
         // ===========================================
         class SimpleAuthManager {
@@ -1215,7 +1233,8 @@
                     showMessage(this.getErrorMessage(error), 'error')
                 }
             }
-async handleResetPassword() {
+
+            async handleResetPassword() {
                 const email = document.getElementById('authEmail')?.value?.trim()
 
                 if (!email) {
@@ -1310,7 +1329,8 @@ async handleResetPassword() {
                     `
                 }
             }
-async loadTreatmentCases() {
+
+            async loadTreatmentCases() {
                 if (!supabase || !this.isAuthenticated) {
                     console.log('⚠️ 치료 사례 로드 불가: 미인증 또는 Supabase 미초기화')
                     return
@@ -1357,11 +1377,11 @@ async loadTreatmentCases() {
                     <div class="before-after-card">
                         <div class="image-comparison">
                             <div class="comparison-image">
-                                <img src="${case_.before_image}" alt="치료 전" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentNode.innerHTML='<div style=\\"height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;\\">이미지 로드 실패</div>'">
+                                <img src="${case_.before_image}" alt="치료 전" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" onerror="this.parentNode.innerHTML='<div style=\\"height:100%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;\\">이미지 로드 실패</div>'">
                                 <div class="image-label before-label">BEFORE</div>
                             </div>
                             <div class="comparison-image">
-                                <img src="${case_.after_image}" alt="치료 후" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentNode.innerHTML='<div style=\\"height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;\\">이미지 로드 실패</div>'">
+                                <img src="${case_.after_image}" alt="치료 후" style="width: 100%; height: 100%; object-fit: contain; object-position: center;" onerror="this.parentNode.innerHTML='<div style=\\"height:100%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;\\">이미지 로드 실패</div>'">
                                 <div class="image-label after-label">AFTER</div>
                             </div>
                         </div>
@@ -1430,7 +1450,8 @@ async loadTreatmentCases() {
                 })
             })
         }
-// 스크롤시 네비게이션 스타일 변경
+
+        // 스크롤시 네비게이션 스타일 변경
         function initScrollNavbar() {
             window.addEventListener('scroll', function() {
                 const navbar = document.querySelector('.navbar')
@@ -1526,7 +1547,8 @@ async loadTreatmentCases() {
                 setTimeout(() => location.reload(), 2000)
             }
         }
-// ===========================================
+
+        // ===========================================
         // 페이지 초기화
         // ===========================================
         
@@ -1619,9 +1641,6 @@ async loadTreatmentCases() {
                 console.error('프로필 로드 실패:', error)
             }
         }
-    </script>
-</body>
-</html>
     </script>
 </body>
 </html>
