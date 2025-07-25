@@ -1140,8 +1140,12 @@
                         this.updateUIForUnauthenticatedUser()
                     }
 
-                    // 인증 상태 변경 감지
+                    // 인증 상태 변경 감지 (무한 루프 방지)
+                    let isUpdating = false
                     supabase.auth.onAuthStateChange((event, session) => {
+                        if (isUpdating) return
+                        isUpdating = true
+                        
                         console.log('🔄 Auth state changed:', event)
                         if (session) {
                             this.currentUser = session.user
@@ -1152,6 +1156,8 @@
                             this.isAuthenticated = false
                             this.updateUIForUnauthenticatedUser()
                         }
+                        
+                        setTimeout(() => { isUpdating = false }, 1000)
                     })
                 } catch (error) {
                     console.error('❌ Auth 초기화 실패:', error)
