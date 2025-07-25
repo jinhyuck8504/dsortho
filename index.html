@@ -1311,13 +1311,39 @@
                             <p>실제 환자분들의 치료 전후 사진을 확인하실 수 있습니다.</p>
                             <div style="margin-top: 20px;">
                                 <button onclick="handleSignOut()" class="btn" style="background: #dc3545; color: white;">로그아웃</button>
+                                <button onclick="forceReloadCases()" class="btn" style="background: #28a745; color: white; margin-left: 10px;">사례 새로고침</button>
                             </div>
                         </div>
                     `
                 }
                 
-                // 실제 치료 사례 로드
-                this.loadTreatmentCases()
+                // 강제로 실제 치료 사례 로드
+                this.forceLoadRealCases()
+            }
+
+            // 강제로 실제 데이터 로드
+            async forceLoadRealCases() {
+                try {
+                    console.log('🔄 강제 실제 데이터 로드 시도...')
+                    
+                    const { data, error } = await supabase
+                        .from('treatment_cases')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+
+                    console.log('📊 강제 로드 결과:', { data, error, count: data?.length })
+
+                    if (data && data.length > 0) {
+                        console.log('✅ 실제 데이터 발견! 표시 중...')
+                        this.displayTreatmentCases(data)
+                    } else {
+                        console.log('⚠️ 데이터 없음 또는 오류. 임시 데이터 표시')
+                        this.forceShowGalleryWithRealData()
+                    }
+                } catch (error) {
+                    console.error('❌ 강제 로드 실패:', error)
+                    this.forceShowGalleryWithRealData()
+                }
             }
 
             updateUIForUnauthenticatedUser() {
