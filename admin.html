@@ -77,7 +77,8 @@
         .tab-content.active {
             display: block;
         }
-.form-group {
+        
+        .form-group {
             margin-bottom: 20px;
         }
         
@@ -187,7 +188,8 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
-.btn {
+        
+        .btn {
             background: #1a237e;
             color: white;
             padding: 12px 30px;
@@ -288,10 +290,20 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+        
+        .server-error {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-<div class="container">
+    <div class="container">
         <div class="header">
             <h1>🏥 대치삼성정형외과 관리자</h1>
             <p>사이트 콘텐츠 관리 시스템</p>
@@ -357,7 +369,8 @@
                 </div>
             </form>
         </div>
-<!-- 치료 사례 탭 -->
+
+        <!-- 치료 사례 탭 -->
         <div id="casesTab" class="tab-content">
             <h2>📸 치료 사례 관리</h2>
             
@@ -412,7 +425,8 @@
             </div>
         </div>
     </div>
-<script type="module">
+
+    <script type="module">
         import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2'
 
         // Supabase 설정
@@ -498,7 +512,8 @@
                 reader.onerror = error => reject(error)
             })
         }
-// 프로필 업데이트
+
+        // 프로필 업데이트
         document.getElementById('profileForm').addEventListener('submit', async (e) => {
             e.preventDefault()
             
@@ -542,7 +557,11 @@
                         .insert([profileData])
                 }
                 
-                if (result.error) throw result.error
+                if (result.error) {
+                    console.error('프로필 저장 오류:', result.error)
+                    showMessage('서버 연결 문제로 프로필 저장에 실패했습니다. 나중에 다시 시도해주세요.', 'error')
+                    return
+                }
                 
                 showMessage('프로필이 성공적으로 업데이트되었습니다!', 'success')
                 
@@ -553,7 +572,7 @@
                 
             } catch (error) {
                 console.error('프로필 업데이트 실패:', error)
-                showMessage('프로필 업데이트 중 오류가 발생했습니다: ' + error.message, 'error')
+                showMessage('프로필 업데이트 중 오류가 발생했습니다. 다시 시도해주세요.', 'error')
             }
         })
 
@@ -593,7 +612,11 @@
                         }
                     ])
                 
-                if (error) throw error
+                if (error) {
+                    console.error('업로드 오류:', error)
+                    showMessage('서버 연결 문제로 업로드에 실패했습니다. 나중에 다시 시도해주세요.', 'error')
+                    return
+                }
                 
                 showMessage('치료 사례가 성공적으로 업로드되었습니다!', 'success')
                 
@@ -618,13 +641,14 @@
                 
             } catch (error) {
                 console.error('업로드 실패:', error)
-                showMessage('업로드 중 오류가 발생했습니다: ' + error.message, 'error')
+                showMessage('업로드 중 오류가 발생했습니다. 다시 시도해주세요.', 'error')
             } finally {
                 document.getElementById('loading').style.display = 'none'
                 document.getElementById('submitBtn').disabled = false
             }
         })
-// 치료 사례 목록 로드
+
+        // 치료 사례 목록 로드 (500 오류 대응)
         async function loadCases() {
             try {
                 const { data, error } = await supabase
@@ -632,11 +656,22 @@
                     .select('*')
                     .order('created_at', { ascending: false })
                 
-                if (error) throw error
-                
                 const casesList = document.getElementById('casesList')
                 
-                if (data.length === 0) {
+                if (error) {
+                    console.error('목록 로드 실패:', error)
+                    casesList.innerHTML = `
+                        <div class="server-error">
+                            <h4>⚠️ 서버 연결 문제</h4>
+                            <p>치료 사례 목록을 불러올 수 없습니다.</p>
+                            <p>Supabase 서버에 일시적인 문제가 발생했습니다.</p>
+                            <button onclick="loadCases()" class="btn" style="margin-top: 15px;">다시 시도</button>
+                        </div>
+                    `
+                    return
+                }
+                
+                if (!data || data.length === 0) {
                     casesList.innerHTML = '<p>아직 등록된 치료 사례가 없습니다.</p>'
                     return
                 }
@@ -656,7 +691,14 @@
                 
             } catch (error) {
                 console.error('목록 로드 실패:', error)
-                showMessage('목록을 불러오는 중 오류가 발생했습니다.', 'error')
+                const casesList = document.getElementById('casesList')
+                casesList.innerHTML = `
+                    <div class="server-error">
+                        <h4>⚠️ 연결 오류</h4>
+                        <p>네트워크 문제로 목록을 불러올 수 없습니다.</p>
+                        <button onclick="loadCases()" class="btn" style="margin-top: 15px;">다시 시도</button>
+                    </div>
+                `
             }
         }
 
@@ -670,7 +712,11 @@
                     .delete()
                     .eq('id', id)
                 
-                if (error) throw error
+                if (error) {
+                    console.error('삭제 실패:', error)
+                    showMessage('삭제 중 오류가 발생했습니다.', 'error')
+                    return
+                }
                 
                 showMessage('치료 사례가 삭제되었습니다.', 'success')
                 loadCases()
@@ -709,7 +755,10 @@
                     .select('*')
                     .limit(1)
                 
-                if (error) throw error
+                if (error) {
+                    console.error('프로필 로드 실패:', error)
+                    return
+                }
                 
                 if (data && data.length > 0) {
                     const profile = data[0]
