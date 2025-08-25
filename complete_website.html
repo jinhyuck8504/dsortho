@@ -819,9 +819,10 @@
         /* Before After Gallery */
         .before-after-gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 30px;
             margin: 60px 0;
+            justify-items: center;
         }
         
         .before-after-card {
@@ -830,6 +831,8 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             overflow: hidden;
             transition: transform 0.3s ease;
+            width: 100%;
+            max-width: 600px;
         }
         
         .before-after-card:hover {
@@ -837,21 +840,33 @@
         }
         
         .image-comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            width: 100%;
+            height: 500px;
+            background: #f8f9fa;
         }
         
         .comparison-image {
             position: relative;
-            width: 100%;
-            height: 200px;
+            width: 50%;
+            height: 100%;
             overflow: hidden;
+            background: #f8f9fa;
+            border: none;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .comparison-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            border-radius: 8px;
         }
         
         .image-label {
@@ -1213,7 +1228,6 @@
                         <h4>🏥 주요 경력</h4>
                         <ul class="credential-list">
                             <li>전) 강남안세병원 의무원장</li>
-                            <li>전) 중앙에스병원 의무원장</li>
                             <li>대한 정형외과학회 정회원</li>
                             <li>대한 슬관절학회 정회원</li>
                             <li>대한 견주관절학회 정회원</li>
